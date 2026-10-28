@@ -74,52 +74,52 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
  <h2>The task</h2>
  <p class="kicker">Process a set of 100 full-text biomedical papers (PMC, JATS XML).</p>
  <div class="grid2">
-  <div class="panel"><h3>Task 1 · Gene and disease extraction</h3><p>For each paper, extract all gene names and disease names mentioned in it, and output the list of genes and diseases identified in each paper, if any.</p></div>
-  <div class="panel"><h3>Task 2 · Gene–disease relationship analysis</h3><p>For paper <i>i</i> with N<sub>i</sub> genes and M<sub>i</sub> diseases, there are N<sub>i</sub> × M<sub>i</sub> possible pairs. For each pair, decide whether the paper gives evidence of an association/correlation or a causal relationship; if so, link the gene and the disease. The final output is a gene–disease bipartite graph per paper.</p></div>
+  <div class="panel"><h3>Task 1 · Gene and disease extraction</h3><p>Extract all gene and disease mentions from each paper and output the identified lists, if any.</p></div>
+  <div class="panel"><h3>Task 2 · Gene–disease relationship analysis</h3><p>For paper <i>i</i> with N<sub>i</sub> genes and M<sub>i</sub> diseases, evaluate all N<sub>i</sub> × M<sub>i</sub> candidate pairs. Link a pair if the paper provides evidence of an association, correlation, or causal relationship, yielding a gene–disease bipartite graph per paper.</p></div>
  </div>
- <p class="note">Our additions: every link carries the sentence(s) that support it, is labelled as the paper's own finding or background knowledge, and weak evidence is flagged <i>uncertain</i> instead of linked.</p>
+ <p class="note">Our extensions: every link includes its supporting sentence(s) and is labeled as the paper's own finding or background knowledge, while weak evidence is flagged <i>uncertain</i> rather than linked.</p>
 </section>
 
 <section id="workflow">
  <h2>Experiment workflow design</h2>
- <p class="kicker">Baseline: PubTator3. Models used in this task: Claude Opus 5.5, GPT-6.1 Sol and GPT-6 Astra.</p>
+ <p class="kicker">Baseline: PubTator3. Models used in the blind tests: Claude Opus 5.5, GPT-6.1 Sol, and GPT-6 Astra.</p>
  <div class="flow">
-  <div class="step"><span class="n">1</span><b>Rules as a skill</b><p>Write a skill.md that fixes the experiment workflow and the decision rules.</p></div>
-  <div class="step"><span class="n">2</span><b>Tune on one paper</b><p>Adjust the process on 1 paper; keep 5–10 papers back for formal comparison.</p></div>
-  <div class="step"><span class="n">3</span><b>Blind test</b><p>Fresh sessions that have not seen any answer redo the paper with the rules only.</p></div>
-  <div class="step"><span class="n">4</span><b>Format verification</b><p>A contract validator checks every quote, offset and table.</p></div>
+  <div class="step"><span class="n">1</span><b>Rules as a skill</b><p>Define the experiment workflow and decision rules in a standardized skill.md.</p></div>
+  <div class="step"><span class="n">2</span><b>Tune on one paper</b><p>Refine the process on 1 paper; hold out 5–10 papers for formal comparison.</p></div>
+  <div class="step"><span class="n">3</span><b>Blind test</b><p>Re-run the paper in fresh, unprimed sessions using only the written rules.</p></div>
+  <div class="step"><span class="n">4</span><b>Format verification</b><p>A contract validator verifies every quote, character offset, and table.</p></div>
   <div class="step"><span class="n">5</span><b>Result table</b><p>Compare models and rule versions pair by pair.</p></div>
  </div>
- <div class="loop">↺ Loopback: disagreements become new rules or boundary cases, and the cycle repeats.</div>
+ <div class="loop">↺ Feedback loop: disagreements are codified as new rules or boundary cases for the next iteration.</div>
 </section>
 
 <section id="method">
- <h2>How the method was built</h2>
+ <h2>Method development</h2>
  <div class="panel"><ul>
-  <li>Surveyed existing methods and selected <b>PubTator3</b> as the baseline for comparison.</li>
-  <li>Formulated rules on <b>5 pilot papers</b>, iterating from Skill 1.0 to 1.3, and extracted <b>35 boundary cases</b> to check that the rules work.</li>
-  <li>Condensed the full rules into a compact <b>decision card</b> to cut tokens and request turns, and verified it behaves like the full rules (<b>110/112</b> boundary-case decisions agree, stable across 3 runs).</li>
-  <li>Ran an <b>A/B test</b> on a fixed set of 12 papers.</li>
-  <li>Ran the final version on <b>all 100 papers</b>, then measured accuracy on the expert-annotated <b>BioRED</b> benchmark.</li>
+  <li>Reviewed existing systems and selected <b>PubTator3</b> as the comparison baseline.</li>
+  <li>Developed extraction rules on <b>5 pilot papers</b>, iterating from Skill 1.0 to 1.3, and curated <b>35 boundary cases</b> to validate rule behavior.</li>
+  <li>Condensed the full rules into a compact <b>decision card</b> to reduce token usage and request turns, confirming that it matches the full rules (<b>110/112</b> boundary-case decisions agree, stable across 3 runs).</li>
+  <li>Evaluated design variants in a controlled <b>A/B test</b> on a fixed set of 12 papers.</li>
+  <li>Executed the final configuration across <b>all 100 papers</b> and benchmarked accuracy on the expert-annotated <b>BioRED</b> corpus.</li>
  </ul></div>
 </section>
 
 <section id="cost">
  <h2>Cost-effective optimization</h2>
- <p class="kicker">Model: Claude Opus 5.5. Costs are list prices reported by the CLI, including repair requests.</p>
+ <p class="kicker">Model: Claude Opus 5.5. Costs reflect CLI-reported list prices, including repair requests.</p>
  <div class="panel bars" id="costbars"></div>
- <p class="note">Rows are measured on different paper sets, as labelled; the 100-paper average includes the long papers and every repair request.</p>
+ <p class="note">Each row is measured on its labeled paper set; the 100-paper average includes long papers and all repair requests.</p>
  <div class="grid2" style="margin-top:16px">
   <div class="panel"><h3>What changed</h3><ul>
-   <li>Picked 5 papers as the baseline of model behaviour before and after each optimization.</li>
-   <li>Built a shared toolkit so the model does not have to locate text or compute offsets itself.</li>
-   <li><b>One request</b> replaces multiple rounds of conversation.</li>
-   <li>Compressed the skill rules (input <b>20k → 9k tokens</b>) and sent them as a cached system prompt.</li>
+   <li>Tracked model behavior across 5 baseline papers before and after each optimization.</li>
+   <li>Built a deterministic toolkit so the model does not need to locate text spans or compute offsets.</li>
+   <li><b>One request</b> replaces multi-turn agent interaction.</li>
+   <li>Compressed the skill rules (input <b>20k → 9k tokens</b>) and served them as a cached system prompt.</li>
   </ul></div>
   <div class="panel"><h3>Output savings</h3><ul>
-   <li>A lean output format with only what is needed: entities, evidence and pairs.</li>
-   <li>The model cites <b>sentence numbers</b> instead of copying text; a script rebuilds quotes and offsets from the paper.</li>
-   <li>Very long inputs (conference proceedings) are sent in segments.</li>
+   <li>Restricted the output schema to essential fields: entities, evidence, and pairs.</li>
+   <li>The model cites <b>sentence numbers</b> rather than copying text; a post-processing script reconstructs quotes and offsets from the paper.</li>
+   <li>Segmented extra-long inputs (conference proceedings) into chunks.</li>
   </ul></div>
  </div>
 </section>
@@ -127,16 +127,16 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
 <section id="pipeline">
  <h2>How one request replaces a multi-turn conversation</h2>
  <div class="flow">
-  <div class="step"><span class="n">1</span><b>Script packs the input</b><p>Rules, the paper's numbered blocks and sentences, and the output format go into one prompt.</p></div>
-  <div class="step"><span class="n">2</span><b>Model answers once</b><p>A concise structured judgment; no tools, no file reading, no commands.</p></div>
-  <div class="step"><span class="n">3</span><b>Script does the rest</b><p>The toolkit locates names, computes offsets, completes the gene × disease matrix and verifies the format.</p></div>
-  <div class="step"><span class="n">4</span><b>One repair, only on error</b><p>If verification finds problems (e.g. a mismatched citation), the error list goes back to the model once.</p></div>
+  <div class="step"><span class="n">1</span><b>Script packs the input</b><p>Combines the rules, the paper's numbered blocks and sentences, and the output schema into one prompt.</p></div>
+  <div class="step"><span class="n">2</span><b>Model answers once</b><p>Produces a concise structured judgment without tool calls, file reads, or shell commands.</p></div>
+  <div class="step"><span class="n">3</span><b>Script does the rest</b><p>The toolkit resolves entity names, computes offsets, populates the gene × disease matrix, and validates the format.</p></div>
+  <div class="step"><span class="n">4</span><b>One repair, only on error</b><p>If validation detects errors (e.g., a mismatched citation), the error list is returned to the model once for correction.</p></div>
  </div>
 </section>
 
 <section id="ab">
  <h2>A/B test: rule compression and thinking intensity</h2>
- <p class="kicker">12 papers, frozen before testing: 7 research articles (2 short, 3 medium, 2 long), 2 case reports (one in Spanish), 2 reviews and 1 brief report. Same model, one request per paper.</p>
+ <p class="kicker">12 papers, frozen before testing: 7 research articles (2 short, 3 medium, 2 long), 2 case reports (one in Spanish), 2 reviews, and 1 brief report. Evaluated with the same model at one request per paper.</p>
  <div class="panel scroll"><table>
   <tr><th></th><th class="num">V1 · card, medium</th><th class="num">V2 · full rules, medium</th><th class="num">V3 · card, low</th></tr>
   <tr><td>Cost, 12 papers</td><td class="num">$3.55</td><td class="num">$4.01</td><td class="num"><b>$2.71</b></td></tr>
@@ -146,15 +146,15 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
   <tr><td>Pair-status agreement with V1</td><td class="num">—</td><td class="num">0.976</td><td class="num">0.985</td></tr>
  </table></div>
  <div class="callout"><b>Takeaways</b><ul>
-  <li><b>Compressing the rules into a card costs nothing.</b> V1 and V2 agree on 97.6% of pairs, and V1 is 11% cheaper. Most of V2's 11 negative pairs come from one paper's variant-vs-variant comparisons, a rule ambiguity logged for the next rule version.</li>
-  <li><b>Low thinking is about 2.4× faster and 24% cheaper</b> with 98.5% agreement, but it reports fewer supported relations (56 vs 64) and fewer uncertain flags (15 vs 28).</li>
-  <li><b>V1 was chosen</b> because it finds the most supported relations at a moderate cost. It was then run on all 100 papers.</li>
+  <li><b>Compressing the rules into a card preserves the method's behavior.</b> V1 and V2 agree on 97.6% of pairs, while V1 reduces cost by 11%. Most of V2's 11 negative pairs stem from variant-vs-variant comparisons in one paper—a boundary ambiguity logged for the next rule revision.</li>
+  <li><b>Low thinking is about 2.4× faster and 24% cheaper</b> with 98.5% agreement, but recovers fewer supported relations (56 vs 64) and fewer uncertain flags (15 vs 28).</li>
+  <li><b>V1 was selected</b> because it identifies the most supported relations at a moderate cost; it was subsequently run on all 100 papers.</li>
  </ul></div>
 </section>
 
 <section id="pubtator">
  <h2>Our method vs PubTator3 (same 12 papers)</h2>
- <p class="kicker">Same parsed full text for both systems; entities matched by text position. Neither is used as the answer key.</p>
+ <p class="kicker">Both systems processed the same parsed full text with entities aligned by character position; neither is treated as ground truth.</p>
  <div class="tiles">
   <div class="tile"><div class="k">Relations reported</div><div class="v">64 vs 23</div><div class="s">ours vs PubTator3; 11 found by both</div></div>
   <div class="tile"><div class="k">Beyond the abstract</div><div class="v">81%</div><div class="s">of our relations rest on body text, tables or captions</div></div>
@@ -162,15 +162,15 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
  </div>
  <div class="grid2">
   <div class="panel"><h3>Pros</h3><ul class="pros">
-   <li>2.8× more relations, each tied to its supporting sentence.</li>
-   <li>81% rest on text beyond the abstract: body, tables, captions.</li>
-   <li>Labels each relation as this study's own finding or background knowledge, and flags weak evidence as uncertain (28 pairs).</li>
-   <li>Keeps symptoms apart from diseases.</li>
-   <li>Handles a Spanish paper where PubTator3 found no genes.</li>
+   <li>Extracts 2.8× more relations, each anchored to its supporting sentence.</li>
+   <li>81% are supported by full-text content beyond the abstract: body text, tables, and captions.</li>
+   <li>Distinguishes novel study findings from background knowledge and flags weak evidence as uncertain (28 pairs).</li>
+   <li>Separates clinical symptoms from diseases.</li>
+   <li>Processes a Spanish-language paper in which PubTator3 detected no genes.</li>
   </ul></div>
   <div class="panel"><h3>Cons</h3><ul class="cons">
-   <li>About $0.30 and 1 minute per paper; PubTator3 is free and precomputed.</li>
-   <li>Misses 12 relations PubTator3 finds, mostly symptoms or pairs deliberately judged weak.</li>
+   <li>Requires about $0.30 and 1 minute per paper, whereas PubTator3 is free and precomputed.</li>
+   <li>Misses 12 relations reported by PubTator3: 3 treat a symptom as the disease, 4 were judged too weakly supported, and 5 involve a gene or disease our method did not record.</li>
    <li>No database IDs (NCBI Gene / MeSH).</li>
   </ul></div>
  </div>
@@ -185,19 +185,19 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
   <div class="tile"><div class="k">vs PubTator3</div><div class="v">972 vs 198</div><div class="s">90% of ours rest on text beyond the abstract</div></div>
  </div>
  <div class="grid2">
-  <div class="panel"><h3>Problem: repair requests</h3><p>Repair requests caused by output-format slips wasted tokens. The parser was made tolerant of the common slips (fixed).</p></div>
+  <div class="panel"><h3>Problem: repair requests</h3><p>Minor output-format deviations initially triggered token-consuming repair requests; the parser was updated to tolerate common syntax slips (fixed).</p></div>
   <div class="panel"><h3>Why 25 papers have no supported relation</h3>
-   <p>The papers themselves do not address gene–disease associations: these are true negatives, not missed detections.</p>
-   <ul><li>8 mention no gene at all (e.g. dialysis timing, adolescent gambling, nanoparticle chemistry).</li>
-   <li>8 mention genes but no disease (e.g. fly chromatin, worm oocytes, plant transcriptomes).</li>
-   <li>9 mention both, but no pair is supported by the text (genes used only as test markers, speculative implications).</li></ul>
-   <p>PubTator3 likewise found almost no relations in the same 25 papers (one in total).</p></div>
+   <p>These articles do not investigate gene–disease associations; they represent true negatives rather than missed detections.</p>
+   <ul><li>8 mention no genes at all (e.g., dialysis timing, adolescent gambling, nanoparticle chemistry).</li>
+   <li>8 mention genes but no diseases (e.g., fly chromatin, worm oocytes, plant transcriptomes).</li>
+   <li>9 mention both entities, but no pair is supported by the text (e.g., genes used solely as assay markers or in speculative discussion).</li></ul>
+   <p>Consistent with this, PubTator3 reported almost no relations in the same 25 papers (one in total).</p></div>
  </div>
 </section>
 
 <section id="biored">
  <h2>Result on the BioRED benchmark</h2>
- <p class="kicker">BioRED: 419 expert-annotated PubMed abstracts containing 1,633 gene–disease relations (every abstract in the dataset that has one). We never trained or tuned on BioRED, and ran the same frozen V1 used for the 100 papers. Cost was $0.056 per abstract.</p>
+ <p class="kicker">BioRED comprises 419 expert-annotated PubMed abstracts containing 1,633 gene–disease relations (every abstract in the corpus that has one). Without training or tuning on BioRED, we ran the same frozen V1 pipeline used for the 100 papers at a cost of $0.056 per abstract.</p>
  <div class="grid2">
   <div class="panel scroll"><table>
    <tr><th></th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th></tr>
@@ -205,9 +205,9 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
    <tr><td>Supported + uncertain</td><td class="num">0.81</td><td class="num">0.58</td><td class="num">0.68</td></tr>
   </table></div>
   <div class="panel"><ul>
-   <li><b>Stable across Train / Dev / Test:</b> F1 is 0.58 / 0.61 / 0.54, and the 95% confidence intervals overlap.</li>
-   <li><b>Same precision as PubTator3</b> on 50 test abstracts (0.84 vs 0.83), even though PubTator3 is trained on BioRED. PubTator3's recall is higher (0.65 vs 0.41).</li>
-   <li><b>Why our recall is lower:</b> 59% of the missed relations are pairs our method read and deliberately judged <i>not_found</i> or <i>uncertain</i>. The rest are mainly symptoms or broad terms that BioRED counts as diseases.</li>
+   <li><b>Consistent across Train / Dev / Test splits:</b> F1 is 0.58 / 0.61 / 0.54, with overlapping 95% confidence intervals.</li>
+   <li><b>Matches PubTator3 precision</b> on 50 test abstracts (0.84 vs 0.83), even though PubTator3 is trained on BioRED. PubTator3's recall is higher (0.65 vs 0.41).</li>
+   <li><b>Why our recall is lower:</b> 59% of the missed relations are pairs our method evaluated and deliberately classified as <i>not_found</i> or <i>uncertain</i>; the remainder mostly involve symptoms or broad terms (e.g., "tumor", "infection") that BioRED annotates as diseases.</li>
   </ul></div>
  </div>
 </section>
@@ -215,8 +215,8 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
 <section id="next">
  <h2>What's next</h2>
  <div class="grid2">
-  <div class="panel"><h3>Compare different models</h3><p>Run the same benchmark with GPT-6.1 Sol, GPT-6 Astra and others. Results across several models make the method more credible, and show how general and cost-effective it is.</p></div>
-  <div class="panel"><h3>A cheaper two-stage setup</h3><p>Let a local model such as Qwen-3.8 27B do the first pass, then use a commercial model only to verify accuracy and completeness.</p></div>
+  <div class="panel"><h3>Compare different models</h3><p>Evaluate GPT-6.1 Sol, GPT-6 Astra, and additional models on the same benchmark to assess cross-model generalizability and cost–accuracy trade-offs.</p></div>
+  <div class="panel"><h3>A cheaper two-stage setup</h3><p>Use a local model such as Qwen-3.8 27B for initial extraction, reserving a commercial model to verify accuracy and completeness.</p></div>
  </div>
 </section>
 
