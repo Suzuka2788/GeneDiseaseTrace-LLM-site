@@ -50,33 +50,33 @@ html.zh [data-l="en"],html:not(.zh) [data-l="zh"]{display:none!important}
 </style></head><body><main>
 <div class="topbar"><a class="go" href="../index.html">← GeneDiseaseTrace-LLM</a><a class="go" href="index.html"><span data-l="en">Per-paper graphs</span><span data-l="zh">逐篇二部图</span> →</a><span class="spacer"></span><button id="langBtn" type="button" aria-label="Switch language / 切换语言">中文</button></div>
 <h1><span data-l="en">All 100 papers in one gene–disease graph</span><span data-l="zh">100 篇论文合并为一张基因–疾病图</span></h1>
-<p class="sub"><span data-l="en">Every supported gene–disease link from the 100 papers, merged into one network. <b>Thicker lines are supported by more papers</b>; larger nodes appear in supported links in more papers. Genes and diseases are merged across papers by their normalized name (case, dashes and apostrophes unified), not by database ID, so synonyms such as "Parkinson disease" and "Parkinson's disease" stay separate.</span><span data-l="zh">100 篇论文中所有 supported 的基因–疾病连线，合并成一个网络。<b>支持某条连线的论文越多，线越粗</b>；节点越大，说明它在越多篇论文的 supported 关系中出现。基因和疾病按规范化后的名称跨论文合并（统一大小写、连字符和撇号），没有使用数据库 ID，所以 "Parkinson disease" 和 "Parkinson's disease" 这类同义写法仍是两个节点。</span></p>
+<p class="sub"><span data-l="en">Every supported gene–disease link across the 100 papers, aggregated into one network. <b>Thicker lines indicate support from more papers</b>, while larger nodes appear in supported links across more papers. Genes and diseases are merged across papers by normalized surface form (case, hyphens, and apostrophes unified) rather than database ID, so lexical variants such as "Parkinson disease" and "Parkinson's disease" remain separate nodes.</span><span data-l="zh">将 100 篇论文中全部 supported 的基因–疾病关系聚合为一张全局网络。<b>支持某条连边的论文越多，连边越粗</b>；节点越大，代表其在越多篇论文的 supported 关系中出现。基因与疾病按规范化名称跨文献合并（统一大小写、连字符与撇号），暂未映射至数据库 ID，因此 "Parkinson disease" 与 "Parkinson's disease" 等同义表面写法仍保留为独立节点。</span></p>
 <div class="tiles" id="tiles"></div>
 <div class="controls">
  <input type="search" id="q" list="names" placeholder="" aria-label="Find a gene or disease"><datalist id="names"></datalist>
- <label><span data-l="en">Show entities in at least</span><span data-l="zh">只显示出现在至少</span> <select id="min"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select> <span data-l="en">paper(s)</span><span data-l="zh">篇论文中的实体</span></label>
+ <label><span data-l="en">Show entities in at least</span><span data-l="zh">仅显示出现在至少</span> <select id="min"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select> <span data-l="en">paper(s)</span><span data-l="zh">篇论文中的实体</span></label>
  <button id="reset"><span data-l="en">Reset view</span><span data-l="zh">重置视图</span></button>
 </div>
 <div class="legend" id="legend"></div>
 <div class="layout">
- <div class="panel" id="canvasBox"><div class="hint"><span data-l="en">Scroll to zoom · drag to pan · click a node or line for details</span><span data-l="zh">滚轮缩放 · 拖动平移 · 点击节点或连线查看详情</span></div></div>
+ <div class="panel" id="canvasBox"><div class="hint"><span data-l="en">Scroll to zoom · drag to pan · click a node or line for details</span><span data-l="zh">滚轮缩放 · 拖动平移 · 点击节点或连边查看详情</span></div></div>
  <div class="panel" id="detail"></div>
 </div>
 <div class="cols">
- <div class="panel"><b><span data-l="en">Links supported by more than one paper</span><span data-l="zh">由多篇论文支持的连线</span></b><table id="multi"></table></div>
- <div class="panel"><b><span data-l="en">Most connected entities</span><span data-l="zh">连接最多的实体</span></b><table id="hubs"></table></div>
+ <div class="panel"><b><span data-l="en">Links supported by more than one paper</span><span data-l="zh">由多篇论文共同支持的连边</span></b><table id="multi"></table></div>
+ <div class="panel"><b><span data-l="en">Most connected entities</span><span data-l="zh">连接度最高的枢纽实体</span></b><table id="hubs"></table></div>
 </div>
-<div class="panel" style="margin-top:12px"><details><summary><span data-l="en">All links as a table</span><span data-l="zh">全部连线（表格）</span></summary><div id="allBox"></div></details></div>
+<div class="panel" style="margin-top:12px"><details><summary><span data-l="en">All links as a table</span><span data-l="zh">全部连边汇总表</span></summary><div id="allBox"></div></details></div>
 </main><div id="tip"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 const ZH = {
-  "Links": "连线", "Genes": "基因", "Diseases": "疾病", "Links in 2+ papers": "多篇论文支持的连线", "Papers": "论文",
+  "Links": "连边总数", "Genes": "基因节点", "Diseases": "疾病节点", "Links in 2+ papers": "多篇论文支持的连边", "Papers": "论文数",
   "Gene": "基因", "Disease": "疾病", "gene": "基因", "disease": "疾病", "1 paper": "1 篇论文", "2 papers": "2 篇论文",
-  "node size: papers mentioning it in a link (1 → 5)": "节点大小：在多少篇论文的连线中出现（1 → 5）",
-  "Click a gene, a disease or a line to see the papers behind it.": "点击基因、疾病或连线，查看支持它的论文。",
-  "Find a gene or disease": "查找基因或疾病", "Link": "连线", "Paper IDs": "论文编号", "Entity": "实体", "Kind": "类别",
-  "Linked diseases": "相连的疾病", "Linked genes": "相连的基因", "written as": "原文写法",
+  "node size: papers mentioning it in a link (1 → 5)": "节点大小：在多少篇论文的受支持关系中出现（1 → 5）",
+  "Click a gene, a disease, or a line to see the papers behind it.": "点击任一基因、疾病节点或连边，查看支撑该关系的文献详情。",
+  "Find a gene or disease": "搜索基因或疾病名称", "Link": "基因–疾病连边", "Paper IDs": "论文编号", "Entity": "实体名称", "Kind": "类别",
+  "Linked diseases": "关联疾病", "Linked genes": "关联基因", "written as": "原文表面写法",
 };
 let LANG = "en";
 try { LANG = new URLSearchParams(location.search).get("lang") || localStorage.getItem("gdt-lang") || "en"; } catch (e) {}
@@ -84,14 +84,14 @@ if (LANG !== "zh") LANG = "en";
 document.documentElement.classList.toggle("zh", LANG === "zh"); document.documentElement.lang = LANG === "zh" ? "zh-CN" : "en";
 const T = s => (LANG === "zh" && ZH[s]) || s;
 const papersText = n => LANG === "zh" ? `${n} 篇论文` : `${n} paper${n > 1 ? "s" : ""}`;
-const linksText = n => LANG === "zh" ? `${n} 条连线` : `${n} link${n > 1 ? "s" : ""}`;
+const linksText = n => LANG === "zh" ? `${n} 条连边` : `${n} link${n > 1 ? "s" : ""}`;
 const langBtn = document.getElementById("langBtn");
 langBtn.textContent = LANG === "zh" ? "English" : "中文";
 // The layout is deterministic, so switching language simply reloads the page in the other language.
 langBtn.addEventListener("click", () => { const next = LANG === "zh" ? "en" : "zh"; try { localStorage.setItem("gdt-lang", next); } catch (e) {}
   const u = new URL(location.href); u.searchParams.set("lang", next); location.href = u.toString(); });
 document.getElementById("q").placeholder = T("Find a gene or disease");
-const emptyDetail = () => `<p class="note">${T("Click a gene, a disease or a line to see the papers behind it.")}</p>`;
+const emptyDetail = () => `<p class="note">${T("Click a gene, a disease, or a line to see the papers behind it.")}</p>`;
 document.getElementById("detail").innerHTML = emptyDetail();
 const tip = document.getElementById("tip");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
@@ -171,7 +171,7 @@ fetch("merged100.json").then(r => r.json()).then(D => {
   function selectNode(d, zoomTo) {
     focus = d.id; const nb = neighbours(d.id); highlight(nb.add(d.id), l => l.source.id === d.id || l.target.id === d.id);
     const box = document.getElementById("detail"); box.innerHTML = "";
-    box.append(el("h3", {}, d.name), el("div", {class: "m"}, `${T(d.side === "g" ? "Gene" : "Disease")} · ${LANG === "zh" ? "出现在 " + papersText(d.papers.length) + "的 supported 连线中" : "in supported links in " + papersText(d.papers.length)}${d.aka.length > 1 ? " · " + T("written as") + ": " + d.aka.join(", ") : ""}`));
+    box.append(el("h3", {}, d.name), el("div", {class: "m"}, `${T(d.side === "g" ? "Gene" : "Disease")} · ${LANG === "zh" ? "出现在 " + papersText(d.papers.length) + "的 supported 连边中" : "in supported links in " + papersText(d.papers.length)}${d.aka.length > 1 ? " · " + T("written as") + ": " + d.aka.join(", ") : ""}`));
     const mine = links.filter(l => l.source.id === d.id || l.target.id === d.id).sort((a, b) => w(b) - w(a));
     box.append(el("b", {}, `${T(d.side === "g" ? "Linked diseases" : "Linked genes")} (${mine.length})`));
     const ul = el("ul"); mine.forEach(l => { const other = l.source.id === d.id ? l.target : l.source; const li = el("li");
