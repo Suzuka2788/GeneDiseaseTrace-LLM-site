@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GeneDiseaseTrace-LLM</title>
+<meta name="description" content="Evidence-grounded gene–disease relation extraction from full-text biomedical literature, with traceable citations and cost-efficient LLM workflows.">
+<style>
+:root{--surface:#fcfcfb;--panel:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--grid:#e1e0d9;--ring:rgba(11,11,11,.10);
+--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--good:#0f7a52;--on:#ffffff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222220;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--ring:rgba(255,255,255,.10);--c1:#3987e5;--c2:#d95926;--c3:#199e70;--good:#4cc89a}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222220;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--ring:rgba(255,255,255,.10);--c1:#3987e5;--c2:#d95926;--c3:#199e70;--good:#4cc89a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,-apple-system,sans-serif}
+main{max-width:1080px;margin:0 auto;padding:0 16px 64px}
+header.hero{padding:56px 0 28px;border-bottom:1px solid var(--grid)}
+.hero h1{font-size:38px;line-height:1.15;margin:0 0 10px;letter-spacing:-.01em}
+.hero .tag{font-size:19px;color:var(--ink2);max-width:820px;margin:0 0 14px}
+.hero .by{color:var(--ink2);font-size:14px}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 16px;padding:14px 0;border-bottom:1px solid var(--grid);font-size:14px}
+nav.toc a{color:var(--ink2);text-decoration:none}nav.toc a:hover{color:var(--ink);text-decoration:underline}
+section{padding:36px 0 8px;scroll-margin-top:12px}
+h2{font-size:24px;margin:0 0 4px}.kicker{color:var(--ink2);margin:0 0 16px;max-width:820px}
+h3{font-size:16px;margin:0 0 6px}
+a{color:var(--c1)}
+.panel{background:var(--panel);border:1px solid var(--ring);border-radius:10px;padding:16px 18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:16px 0}
+.tile{background:var(--panel);border:1px solid var(--ring);border-radius:10px;padding:14px 16px}
+.tile .k{color:var(--ink2);font-size:13px}.tile .v{font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tile .s{color:var(--ink2);font-size:12px}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--grid);padding:8px 10px;text-align:left;vertical-align:top}
+th{color:var(--ink2);font-weight:600}th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:12px 0}
+.step{flex:1 1 150px;background:var(--panel);border:1px solid var(--ring);border-radius:10px;padding:12px 14px;position:relative}
+.step .n{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--c1);color:var(--on);font-size:12px;font-weight:700;text-align:center;line-height:22px;margin-right:6px}
+.step b{font-size:14px}.step p{margin:6px 0 0;color:var(--ink2);font-size:13px}
+.loop{color:var(--ink2);font-size:13px;margin-top:4px}
+.callout{border-left:4px solid var(--c3);background:var(--panel);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0}
+.pros li::marker{content:"+  ";color:var(--good);font-weight:700}.cons li::marker{content:"–  ";color:var(--c2);font-weight:700}
+.bars .row{display:grid;grid-template-columns:minmax(150px,260px) 1fr;gap:12px;align-items:center;margin:8px 0;font-size:14px}
+.bars .track{display:flex;align-items:center;gap:8px}.bars .fill{height:18px;border-radius:4px;background:var(--c1);min-width:3px}
+.bars .val{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px}
+.bars small{display:block;color:var(--ink2);font-size:12px}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.links a{display:block;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--ring);border-radius:10px;padding:14px 16px}
+.links a:hover{border-color:var(--c1)}.links a span{display:block;color:var(--ink2);font-size:13px;margin-top:4px}
+.note{color:var(--ink2);font-size:13px}
+footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var(--ink2);font-size:13px}
+code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
+@media (max-width:640px){.hero h1{font-size:30px}.bars .row{grid-template-columns:1fr}}
+</style></head><body><main>
+
+<header class="hero">
+ <h1>GeneDiseaseTrace-LLM</h1>
+ <p class="tag">Evidence-grounded gene–disease relation extraction from full-text biomedical literature, with traceable citations and cost-efficient LLM workflows.</p>
+ <div class="by">Task presentation · Zeqian Tong · October 28, 2026</div>
+ <div class="tiles">
+  <div class="tile"><div class="k">Papers processed</div><div class="v">100 / 100</div><div class="s">full-text PMC articles, all passed validation</div></div>
+  <div class="tile"><div class="k">Supported relations</div><div class="v">972</div><div class="s">each tied to its source sentence; PubTator3: 198</div></div>
+  <div class="tile"><div class="k">Precision on BioRED</div><div class="v">0.89</div><div class="s">419 expert-annotated abstracts, zero-shot</div></div>
+  <div class="tile"><div class="k">Cost per paper</div><div class="v">$0.44</div><div class="s">78 s; down from $1.26 in agent mode</div></div>
+ </div>
+</header>
+
+<nav class="toc">
+ <a href="#task">The task</a><a href="#workflow">Workflow</a><a href="#method">Building the method</a><a href="#cost">Cost optimization</a>
+ <a href="#pipeline">Single-request pipeline</a><a href="#ab">A/B test</a><a href="#pubtator">vs PubTator3</a><a href="#full100">100 papers</a>
+ <a href="#biored">BioRED</a><a href="#next">What's next</a><a href="#pages">Result pages</a>
+</nav>
+
+<section id="task">
+ <h2>The task</h2>
+ <p class="kicker">Process a set of 100 full-text biomedical papers (PMC, JATS XML).</p>
+ <div class="grid2">
+  <div class="panel"><h3>Task 1 · Gene and disease extraction</h3><p>For each paper, extract all gene names and disease names mentioned in it, and output the list of genes and diseases identified in each paper, if any.</p></div>
+  <div class="panel"><h3>Task 2 · Gene–disease relationship analysis</h3><p>For paper <i>i</i> with N<sub>i</sub> genes and M<sub>i</sub> diseases, there are N<sub>i</sub> × M<sub>i</sub> possible pairs. For each pair, decide whether the paper gives evidence of an association/correlation or a causal relationship; if so, link the gene and the disease. The final output is a gene–disease bipartite graph per paper.</p></div>
+ </div>
+ <p class="note">Our additions: every link carries the sentence(s) that support it, is labelled as the paper's own finding or background knowledge, and weak evidence is flagged <i>uncertain</i> instead of linked.</p>
+</section>
+
+<section id="workflow">
+ <h2>Experiment workflow design</h2>
+ <p class="kicker">Baseline: PubTator3. Models used in this task: Claude Opus 5.5, GPT-6.1 Sol and GPT-6 Astra.</p>
+ <div class="flow">
+  <div class="step"><span class="n">1</span><b>Rules as a skill</b><p>Write a skill.md that fixes the experiment workflow and the decision rules.</p></div>
+  <div class="step"><span class="n">2</span><b>Tune on one paper</b><p>Adjust the process on 1 paper; keep 5–10 papers back for formal comparison.</p></div>
+  <div class="step"><span class="n">3</span><b>Blind test</b><p>Fresh sessions that have not seen any answer redo the paper with the rules only.</p></div>
+  <div class="step"><span class="n">4</span><b>Format verification</b><p>A contract validator checks every quote, offset and table.</p></div>
+  <div class="step"><span class="n">5</span><b>Result table</b><p>Compare models and rule versions pair by pair.</p></div>
+ </div>
+ <div class="loop">↺ Loopback: disagreements become new rules or boundary cases, and the cycle repeats.</div>
+</section>
+
+<section id="method">
+ <h2>How the method was built</h2>
+ <div class="panel"><ul>
+  <li>Surveyed existing methods and selected <b>PubTator3</b> as the baseline for comparison.</li>
+  <li>Formulated rules on <b>5 pilot papers</b>, iterating from Skill 1.0 to 1.3, and extracted <b>35 boundary cases</b> to check that the rules work.</li>
+  <li>Condensed the full rules into a compact <b>decision card</b> to cut tokens and request turns, and verified it behaves like the full rules (<b>110/112</b> boundary-case decisions agree, stable across 3 runs).</li>
+  <li>Ran an <b>A/B test</b> on a fixed set of 12 papers.</li>
+  <li>Ran the final version on <b>all 100 papers</b>, then measured accuracy on the expert-annotated <b>BioRED</b> benchmark.</li>
+ </ul></div>
+</section>
+
+<section id="cost">
+ <h2>Cost-effective optimization</h2>
+ <p class="kicker">Model: Claude Opus 5.5. Costs are list prices reported by the CLI, including repair requests.</p>
+ <div class="panel bars" id="costbars"></div>
+ <p class="note">Rows are measured on different paper sets, as labelled; the 100-paper average includes the long papers and every repair request.</p>
+ <div class="grid2" style="margin-top:16px">
+  <div class="panel"><h3>What changed</h3><ul>
+   <li>Picked 5 papers as the baseline of model behaviour before and after each optimization.</li>
+   <li>Built a shared toolkit so the model does not have to locate text or compute offsets itself.</li>
+   <li><b>One request</b> replaces multiple rounds of conversation.</li>
+   <li>Compressed the skill rules (input <b>20k → 9k tokens</b>) and sent them as a cached system prompt.</li>
+  </ul></div>
+  <div class="panel"><h3>Output savings</h3><ul>
+   <li>A lean output format with only what is needed: entities, evidence and pairs.</li>
+   <li>The model cites <b>sentence numbers</b> instead of copying text; a script rebuilds quotes and offsets from the paper.</li>
+   <li>Very long inputs (conference proceedings) are sent in segments.</li>
+  </ul></div>
+ </div>
+</section>
+
+<section id="pipeline">
+ <h2>How one request replaces a multi-turn conversation</h2>
+ <div class="flow">
+  <div class="step"><span class="n">1</span><b>Script packs the input</b><p>Rules, the paper's numbered blocks and sentences, and the output format go into one prompt.</p></div>
+  <div class="step"><span class="n">2</span><b>Model answers once</b><p>A concise structured judgment; no tools, no file reading, no commands.</p></div>
+  <div class="step"><span class="n">3</span><b>Script does the rest</b><p>The toolkit locates names, computes offsets, completes the gene × disease matrix and verifies the format.</p></div>
+  <div class="step"><span class="n">4</span><b>One repair, only on error</b><p>If verification finds problems (e.g. a mismatched citation), the error list goes back to the model once.</p></div>
+ </div>
+</section>
+
+<section id="ab">
+ <h2>A/B test: rule compression and thinking intensity</h2>
+ <p class="kicker">12 papers, frozen before testing: 7 research articles (2 short, 3 medium, 2 long), 2 case reports (one in Spanish), 2 reviews and 1 brief report. Same model, one request per paper.</p>
+ <div class="panel scroll"><table>
+  <tr><th></th><th class="num">V1 · card, medium</th><th class="num">V2 · full rules, medium</th><th class="num">V3 · card, low</th></tr>
+  <tr><td>Cost, 12 papers</td><td class="num">$3.55</td><td class="num">$4.01</td><td class="num"><b>$2.71</b></td></tr>
+  <tr><td>Model time</td><td class="num">719 s</td><td class="num">740 s</td><td class="num"><b>303 s</b></td></tr>
+  <tr><td>Supported relations</td><td class="num"><b>64</b></td><td class="num">54</td><td class="num">56</td></tr>
+  <tr><td>Uncertain / negative pairs</td><td class="num">28 / 1</td><td class="num">20 / 11</td><td class="num">15 / 1</td></tr>
+  <tr><td>Pair-status agreement with V1</td><td class="num">—</td><td class="num">0.976</td><td class="num">0.985</td></tr>
+ </table></div>
+ <div class="callout"><b>Takeaways</b><ul>
+  <li><b>Compressing the rules into a card costs nothing.</b> V1 and V2 agree on 97.6% of pairs, and V1 is 11% cheaper. Most of V2's 11 negative pairs come from one paper's variant-vs-variant comparisons, a rule ambiguity logged for the next rule version.</li>
+  <li><b>Low thinking is about 2.4× faster and 24% cheaper</b> with 98.5% agreement, but it reports fewer supported relations (56 vs 64) and fewer uncertain flags (15 vs 28).</li>
+  <li><b>V1 was chosen</b> because it finds the most supported relations at a moderate cost. It was then run on all 100 papers.</li>
+ </ul></div>
+</section>
+
+<section id="pubtator">
+ <h2>Our method vs PubTator3 (same 12 papers)</h2>
+ <p class="kicker">Same parsed full text for both systems; entities matched by text position. Neither is used as the answer key.</p>
+ <div class="tiles">
+  <div class="tile"><div class="k">Relations reported</div><div class="v">64 vs 23</div><div class="s">ours vs PubTator3; 11 found by both</div></div>
+  <div class="tile"><div class="k">Beyond the abstract</div><div class="v">81%</div><div class="s">of our relations rest on body text, tables or captions</div></div>
+  <div class="tile"><div class="k">With quoted evidence</div><div class="v">64 vs 0</div><div class="s">PubTator3 gives a prediction score only</div></div>
+ </div>
+ <div class="grid2">
+  <div class="panel"><h3>Pros</h3><ul class="pros">
+   <li>2.8× more relations, each tied to its supporting sentence.</li>
+   <li>81% rest on text beyond the abstract: body, tables, captions.</li>
+   <li>Labels each relation as this study's own finding or background knowledge, and flags weak evidence as uncertain (28 pairs).</li>
+   <li>Keeps symptoms apart from diseases.</li>
+   <li>Handles a Spanish paper where PubTator3 found no genes.</li>
+  </ul></div>
+  <div class="panel"><h3>Cons</h3><ul class="cons">
+   <li>About $0.30 and 1 minute per paper; PubTator3 is free and precomputed.</li>
+   <li>Misses 12 relations PubTator3 finds, mostly symptoms or pairs deliberately judged weak.</li>
+   <li>No database IDs (NCBI Gene / MeSH).</li>
+  </ul></div>
+ </div>
+</section>
+
+<section id="full100">
+ <h2>Result on all 100 papers</h2>
+ <div class="tiles">
+  <div class="tile"><div class="k">Cost</div><div class="v">$43.67</div><div class="s">2.2 model hours · $0.44 and 78 s per paper</div></div>
+  <div class="tile"><div class="k">Passed validation</div><div class="v">100 / 100</div><div class="s">69 on the first request, 31 after one repair</div></div>
+  <div class="tile"><div class="k">Relations</div><div class="v">972</div><div class="s">supported; plus 451 uncertain, 47 explicitly negative</div></div>
+  <div class="tile"><div class="k">vs PubTator3</div><div class="v">972 vs 198</div><div class="s">90% of ours rest on text beyond the abstract</div></div>
+ </div>
+ <div class="grid2">
+  <div class="panel"><h3>Problem: repair requests</h3><p>Repair requests caused by output-format slips wasted tokens. The parser was made tolerant of the common slips (fixed).</p></div>
+  <div class="panel"><h3>Why 25 papers have no supported relation</h3>
+   <p>The papers themselves do not address gene–disease associations: these are true negatives, not missed detections.</p>
+   <ul><li>8 mention no gene at all (e.g. dialysis timing, adolescent gambling, nanoparticle chemistry).</li>
+   <li>8 mention genes but no disease (e.g. fly chromatin, worm oocytes, plant transcriptomes).</li>
+   <li>9 mention both, but no pair is supported by the text (genes used only as test markers, speculative implications).</li></ul>
+   <p>PubTator3 likewise found almost no relations in the same 25 papers (one in total).</p></div>
+ </div>
+</section>
+
+<section id="biored">
+ <h2>Result on the BioRED benchmark</h2>
+ <p class="kicker">BioRED: 419 expert-annotated PubMed abstracts containing 1,633 gene–disease relations (every abstract in the dataset that has one). We never trained or tuned on BioRED, and ran the same frozen V1 used for the 100 papers. Cost was $0.056 per abstract.</p>
+ <div class="grid2">
+  <div class="panel scroll"><table>
+   <tr><th></th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th></tr>
+   <tr><td>Strict (supported only)</td><td class="num"><b>0.89</b></td><td class="num">0.43</td><td class="num">0.58</td></tr>
+   <tr><td>Supported + uncertain</td><td class="num">0.81</td><td class="num">0.58</td><td class="num">0.68</td></tr>
+  </table></div>
+  <div class="panel"><ul>
+   <li><b>Stable across Train / Dev / Test:</b> F1 is 0.58 / 0.61 / 0.54, and the 95% confidence intervals overlap.</li>
+   <li><b>Same precision as PubTator3</b> on 50 test abstracts (0.84 vs 0.83), even though PubTator3 is trained on BioRED. PubTator3's recall is higher (0.65 vs 0.41).</li>
+   <li><b>Why our recall is lower:</b> 59% of the missed relations are pairs our method read and deliberately judged <i>not_found</i> or <i>uncertain</i>. The rest are mainly symptoms or broad terms that BioRED counts as diseases.</li>
+  </ul></div>
+ </div>
+</section>
+
+<section id="next">
+ <h2>What's next</h2>
+ <div class="grid2">
+  <div class="panel"><h3>Compare different models</h3><p>Run the same benchmark with GPT-6.1 Sol, GPT-6 Astra and others. Results across several models make the method more credible, and show how general and cost-effective it is.</p></div>
+  <div class="panel"><h3>A cheaper two-stage setup</h3><p>Let a local model such as Qwen-3.8 27B do the first pass, then use a commercial model only to verify accuracy and completeness.</p></div>
+ </div>
+</section>
+
+<section id="pages">
+ <h2>Interactive result pages</h2>
+ <div class="links">
+  <a href="results/ab/ab_summary.html">A/B test summary<span>V1 vs V2 vs V3 on the 12 frozen papers</span></a>
+  <a href="results/ab/v1_card_lean_medium/vs_pubtator.html">12 papers vs PubTator3<span>Every relation disagreement, with our evidence</span></a>
+  <a href="results/full100/vs_pubtator.html">100 papers vs PubTator3<span>Full-run comparison (about 1 MB, may take a moment)</span></a>
+  <a href="results/biored/biored_results.html">BioRED accuracy<span>419 abstracts, per split, and the head-to-head with PubTator3</span></a>
+ </div>
+</section>
+
+<footer>
+ Code repository: github.com/Suzuka2788/GeneDiseaseTrace-LLM (private; access on request). Input papers are not redistributed here.
+ BioRED: Luo et al., <i>Briefings in Bioinformatics</i> 2022 (public domain, NCBI). PubTator3: NCBI.
+</footer>
+</main>
+<script>
+// Cost per paper by stage (measured; see the labels for the paper set behind each row).
+const COST = [
+ ["Agent mode", "multi-turn, tools; one case report", 1.26, "4.3 min"],
+ ["Single request · V1", "card + medium thinking; 12-paper average", 0.30, "60 s"],
+ ["Single request · V3", "card + low thinking; 12-paper average", 0.23, "25 s"],
+ ["Final run · V1", "all 100 papers, incl. long ones and repairs", 0.44, "78 s"],
+ ["BioRED abstract · V1", "419 abstracts (title + abstract only)", 0.056, "23 s"],
+];
+const box = document.getElementById("costbars"), max = Math.max(...COST.map(c => c[2]));
+COST.forEach(([name, sub, usd, time]) => {
+  const row = document.createElement("div"); row.className = "row";
+  const label = document.createElement("div"); label.textContent = name;
+  const small = document.createElement("small"); small.textContent = sub; label.append(small);
+  const track = document.createElement("div"); track.className = "track";
+  const fill = document.createElement("div"); fill.className = "fill"; fill.style.width = (85 * usd / max) + "%";
+  const val = document.createElement("span"); val.className = "val"; val.textContent = `$${usd < 0.1 ? usd.toFixed(3) : usd.toFixed(2)} · ${time}`;
+  track.append(fill, val); row.append(label, track); box.append(row);
+});
+</script>
+</body></html>
