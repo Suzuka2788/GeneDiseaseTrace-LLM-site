@@ -5,19 +5,29 @@
 <meta name="description" content="Evidence-grounded gene–disease relation extraction from full-text biomedical literature, with traceable citations and cost-efficient LLM workflows.">
 <style>
 :root{--surface:#fcfcfb;--panel:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--grid:#e1e0d9;--ring:rgba(11,11,11,.10);
---c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--good:#0f7a52;--on:#ffffff}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222220;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--ring:rgba(255,255,255,.10);--c1:#3987e5;--c2:#d95926;--c3:#199e70;--good:#4cc89a}}
-:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222220;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--ring:rgba(255,255,255,.10);--c1:#3987e5;--c2:#d95926;--c3:#199e70;--good:#4cc89a}
+--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--good:#0f7a52;--on:#ffffff;--bar:rgba(252,252,251,.88)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222220;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--ring:rgba(255,255,255,.10);--c1:#3987e5;--c2:#d95926;--c3:#199e70;--good:#4cc89a;--bar:rgba(26,26,25,.88)}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222220;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--ring:rgba(255,255,255,.10);--c1:#3987e5;--c2:#d95926;--c3:#199e70;--good:#4cc89a;--bar:rgba(26,26,25,.88)}
+html.zh [data-l="en"],html:not(.zh) [data-l="zh"]{display:none!important}
 *{box-sizing:border-box}
-body{margin:0;background:var(--surface);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,-apple-system,sans-serif}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface);color:var(--ink);font:15px/1.6 "Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif}
 main{max-width:1080px;margin:0 auto;padding:0 16px 64px}
-header.hero{padding:56px 0 28px;border-bottom:1px solid var(--grid)}
+nav.top{position:sticky;top:0;z-index:20;background:var(--bar);backdrop-filter:saturate(1.4) blur(8px);-webkit-backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--grid)}
+nav.top .bar{max-width:1080px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:14px;height:52px}
+nav.top .brand{font-weight:700;color:var(--ink);text-decoration:none;white-space:nowrap;font-size:15px}
+nav.top .links-row{flex:1;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;mask-image:linear-gradient(90deg,#000 92%,transparent)}
+nav.top .links-row::-webkit-scrollbar{display:none}
+nav.top .links-row a{color:var(--ink2);text-decoration:none;font-size:13.5px;white-space:nowrap;padding:6px 10px;border-radius:999px}
+nav.top .links-row a:hover{color:var(--ink);background:var(--grid)}
+nav.top .links-row a.active{color:var(--ink);background:var(--grid);font-weight:600}
+#langBtn{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--ring);background:var(--panel);color:var(--ink);cursor:pointer;white-space:nowrap}
+#langBtn:hover{border-color:var(--c1)}
+header.hero{padding:44px 0 28px;border-bottom:1px solid var(--grid)}
 .hero h1{font-size:38px;line-height:1.15;margin:0 0 10px;letter-spacing:-.01em}
 .hero .tag{font-size:19px;color:var(--ink2);max-width:820px;margin:0 0 14px}
 .hero .by{color:var(--ink2);font-size:14px}
-nav.toc{display:flex;flex-wrap:wrap;gap:6px 16px;padding:14px 0;border-bottom:1px solid var(--grid);font-size:14px}
-nav.toc a{color:var(--ink2);text-decoration:none}nav.toc a:hover{color:var(--ink);text-decoration:underline}
-section{padding:36px 0 8px;scroll-margin-top:12px}
+section{padding:36px 0 8px;scroll-margin-top:64px}
 h2{font-size:24px;margin:0 0 4px}.kicker{color:var(--ink2);margin:0 0 16px;max-width:820px}
 h3{font-size:16px;margin:0 0 6px}
 a{color:var(--c1)}
@@ -44,225 +54,266 @@ th{color:var(--ink2);font-weight:600}th.num,td.num{text-align:right;font-variant
 .bars .val{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px}
 .bars small{display:block;color:var(--ink2);font-size:12px}
 .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.links a{display:block;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--ring);border-radius:10px;padding:14px 16px}
-.links a:hover{border-color:var(--c1)}.links a span{display:block;color:var(--ink2);font-size:13px;margin-top:4px}
+.links a{display:block;position:relative;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--ring);border-radius:10px;padding:14px 44px 14px 16px;font-weight:600;transition:border-color .15s}
+.links a::after{content:"→";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--c1);transition:transform .15s}
+.links a:hover{border-color:var(--c1)}.links a:hover::after{transform:translate(4px,-50%)}
+.links a span{display:block;color:var(--ink2);font-size:13px;margin-top:4px;font-weight:400}
 .note{color:var(--ink2);font-size:13px}
 footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var(--ink2);font-size:13px}
-code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
-@media (max-width:640px){.hero h1{font-size:30px}.bars .row{grid-template-columns:1fr}}
-</style></head><body><main>
+@media (max-width:640px){.hero h1{font-size:30px}.bars .row{grid-template-columns:1fr}nav.top .brand{display:none}}
+</style></head><body>
 
+<nav class="top" aria-label="Sections">
+ <div class="bar">
+  <a class="brand" href="#top">GeneDiseaseTrace-LLM</a>
+  <div class="links-row">
+   <a href="#task"><span data-l="en">Task</span><span data-l="zh">任务</span></a><a href="#workflow"><span data-l="en">Workflow</span><span data-l="zh">流程</span></a><a href="#method"><span data-l="en">Method</span><span data-l="zh">方法</span></a>
+   <a href="#cost"><span data-l="en">Cost</span><span data-l="zh">成本</span></a><a href="#pipeline"><span data-l="en">Pipeline</span><span data-l="zh">单次请求</span></a><a href="#ab">A/B</a>
+   <a href="#pubtator">vs PubTator3</a><a href="#full100"><span data-l="en">100 papers</span><span data-l="zh">100 篇结果</span></a><a href="#biored">BioRED</a>
+   <a href="#graphs"><span data-l="en">Graphs</span><span data-l="zh">二部图</span></a><a href="#next"><span data-l="en">Next</span><span data-l="zh">下一步</span></a><a href="#pages"><span data-l="en">Result pages</span><span data-l="zh">结果页</span></a>
+  </div>
+  <button id="langBtn" type="button" aria-label="Switch language / 切换语言">中文</button>
+ </div>
+</nav>
+
+<main id="top">
 <header class="hero">
  <h1>GeneDiseaseTrace-LLM</h1>
- <p class="tag">Evidence-grounded gene–disease relation extraction from full-text biomedical literature, with traceable citations and cost-efficient LLM workflows.</p>
- <div class="by">Task presentation · Zeqian Tong · October 28, 2026</div>
+ <p class="tag"><span data-l="en">Evidence-grounded gene–disease relation extraction from full-text biomedical literature, with traceable citations and cost-efficient LLM workflows.</span><span data-l="zh">从生物医学全文文献中抽取有证据支撑的基因–疾病关系：每条关系都能追溯到原文，并采用低成本的 LLM 工作流。</span></p>
+ <div class="by"><span data-l="en">Task presentation · Zeqian Tong · October 28, 2026</span><span data-l="zh">任务汇报 · Zeqian Tong · 2026 年 10 月 28 日</span></div>
  <div class="tiles">
-  <div class="tile"><div class="k">Papers processed</div><div class="v">100 / 100</div><div class="s">full-text PMC articles, all passed validation</div></div>
-  <div class="tile"><div class="k">Supported relations</div><div class="v">972</div><div class="s">each tied to its source sentence; PubTator3: 198</div></div>
-  <div class="tile"><div class="k">Precision on BioRED</div><div class="v">0.89</div><div class="s">419 expert-annotated abstracts, zero-shot</div></div>
-  <div class="tile"><div class="k">Cost per paper</div><div class="v">$0.44</div><div class="s">78 s; down from $1.26 in agent mode</div></div>
+  <div class="tile"><div class="k"><span data-l="en">Papers processed</span><span data-l="zh">处理论文</span></div><div class="v">100 / 100</div><div class="s"><span data-l="en">full-text PMC articles, all passed validation</span><span data-l="zh">PMC 全文论文，全部通过校验</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Supported relations</span><span data-l="zh">Supported 关系</span></div><div class="v">972</div><div class="s"><span data-l="en">each tied to its source sentence; PubTator3: 198</span><span data-l="zh">每条都对应原文句子；PubTator3 为 198 条</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Precision on BioRED</span><span data-l="zh">BioRED 精确率</span></div><div class="v">0.89</div><div class="s"><span data-l="en">419 expert-annotated abstracts, zero-shot</span><span data-l="zh">419 篇专家标注摘要，零样本</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Cost per paper</span><span data-l="zh">每篇成本</span></div><div class="v">$0.44</div><div class="s"><span data-l="en">78 s; down from $1.26 in agent mode</span><span data-l="zh">78 秒；agent 模式为 $1.26</span></div></div>
  </div>
 </header>
 
-<nav class="toc">
- <a href="#task">The task</a><a href="#workflow">Workflow</a><a href="#method">Building the method</a><a href="#cost">Cost optimization</a>
- <a href="#pipeline">Single-request pipeline</a><a href="#ab">A/B test</a><a href="#pubtator">vs PubTator3</a><a href="#full100">100 papers</a>
- <a href="#biored">BioRED</a><a href="#graphs">Bipartite graphs</a><a href="#next">What's next</a><a href="#pages">Result pages</a>
-</nav>
-
 <section id="task">
- <h2>The task</h2>
- <p class="kicker">Process a set of 100 full-text biomedical papers (PMC, JATS XML).</p>
+ <h2><span data-l="en">The task</span><span data-l="zh">任务</span></h2>
+ <p class="kicker"><span data-l="en">Process a set of 100 full-text biomedical papers (PMC, JATS XML).</span><span data-l="zh">处理 100 篇生物医学全文论文（PMC，JATS XML）。</span></p>
  <div class="grid2">
-  <div class="panel"><h3>Task 1 · Gene and disease extraction</h3><p>Extract all gene and disease mentions from each paper and output the identified lists, if any.</p></div>
-  <div class="panel"><h3>Task 2 · Gene–disease relationship analysis</h3><p>For paper <i>i</i> with N<sub>i</sub> genes and M<sub>i</sub> diseases, evaluate all N<sub>i</sub> × M<sub>i</sub> candidate pairs. Link a pair if the paper provides evidence of an association, correlation, or causal relationship, yielding a gene–disease bipartite graph per paper.</p></div>
+  <div class="panel"><h3><span data-l="en">Task 1 · Gene and disease extraction</span><span data-l="zh">任务 1 · 基因与疾病抽取</span></h3><p><span data-l="en">Extract all gene and disease mentions from each paper and output the identified lists, if any.</span><span data-l="zh">从每篇论文中抽取提到的所有基因和疾病，输出识别出的列表（如有）。</span></p></div>
+  <div class="panel"><h3><span data-l="en">Task 2 · Gene–disease relationship analysis</span><span data-l="zh">任务 2 · 基因–疾病关系分析</span></h3><p><span data-l="en">For paper <i>i</i> with N<sub>i</sub> genes and M<sub>i</sub> diseases, evaluate all N<sub>i</sub> × M<sub>i</sub> candidate pairs. Link a pair if the paper provides evidence of an association, correlation, or causal relationship, yielding a gene–disease bipartite graph per paper.</span><span data-l="zh">对含 N<sub>i</sub> 个基因、M<sub>i</sub> 个疾病的第 <i>i</i> 篇论文，评估全部 N<sub>i</sub> × M<sub>i</sub> 个候选配对。若论文提供了关联、相关或因果关系的证据，就把这一对连起来，最终得到每篇论文的基因–疾病二部图。</span></p></div>
  </div>
- <p class="note">Our extensions: every link includes its supporting sentence(s) and is labeled as the paper's own finding or background knowledge, while weak evidence is flagged <i>uncertain</i> rather than linked.</p>
+ <p class="note"><span data-l="en">Our extensions: every link includes its supporting sentence(s) and is labeled as the paper's own finding or background knowledge, while weak evidence is flagged <i>uncertain</i> rather than linked.</span><span data-l="zh">我们的扩展：每条连线都附有支撑它的原文句子，并标明是论文自身的发现还是背景知识；证据不足的配对标为 <i>uncertain</i>，不连线。</span></p>
 </section>
 
 <section id="workflow">
- <h2>Experiment workflow design</h2>
- <p class="kicker">Baseline: PubTator3. Models used in the blind tests: Claude Opus 5.5, GPT-6.1 Sol, and GPT-6 Astra.</p>
+ <h2><span data-l="en">Experiment workflow design</span><span data-l="zh">实验流程设计</span></h2>
+ <p class="kicker"><span data-l="en">Baseline: PubTator3. Models used in the blind tests: Claude Opus 5.5, GPT-6.1 Sol, and GPT-6 Astra.</span><span data-l="zh">基线：PubTator3。盲测中使用的模型：Claude Opus 5.5、GPT-6.1 Sol 和 GPT-6 Astra。</span></p>
  <div class="flow">
-  <div class="step"><span class="n">1</span><b>Rules as a skill</b><p>Define the experiment workflow and decision rules in a standardized skill.md.</p></div>
-  <div class="step"><span class="n">2</span><b>Tune on one paper</b><p>Refine the process on 1 paper; hold out 5–10 papers for formal comparison.</p></div>
-  <div class="step"><span class="n">3</span><b>Blind test</b><p>Re-run the paper in fresh, unprimed sessions using only the written rules.</p></div>
-  <div class="step"><span class="n">4</span><b>Format verification</b><p>A contract validator verifies every quote, character offset, and table.</p></div>
-  <div class="step"><span class="n">5</span><b>Result table</b><p>Compare models and rule versions pair by pair.</p></div>
+  <div class="step"><span class="n">1</span><b><span data-l="en">Rules as a skill</span><span data-l="zh">规则写成 skill</span></b><p><span data-l="en">Define the experiment workflow and decision rules in a standardized skill.md.</span><span data-l="zh">用标准化的 skill.md 定义实验流程和判定规则。</span></p></div>
+  <div class="step"><span class="n">2</span><b><span data-l="en">Tune on one paper</span><span data-l="zh">在一篇论文上调试</span></b><p><span data-l="en">Refine the process on 1 paper; hold out 5–10 papers for formal comparison.</span><span data-l="zh">在 1 篇论文上打磨流程；另留 5–10 篇用于正式对比。</span></p></div>
+  <div class="step"><span class="n">3</span><b><span data-l="en">Blind test</span><span data-l="zh">盲测</span></b><p><span data-l="en">Re-run the paper in fresh, unprimed sessions using only the written rules.</span><span data-l="zh">在没有任何先验信息的新会话中，只凭书面规则重做这篇论文。</span></p></div>
+  <div class="step"><span class="n">4</span><b><span data-l="en">Format verification</span><span data-l="zh">格式校验</span></b><p><span data-l="en">A contract validator verifies every quote, character offset, and table.</span><span data-l="zh">契约校验器逐一核对每条引文、字符位置和表格。</span></p></div>
+  <div class="step"><span class="n">5</span><b><span data-l="en">Result table</span><span data-l="zh">结果表</span></b><p><span data-l="en">Compare models and rule versions pair by pair.</span><span data-l="zh">逐对比较不同模型和规则版本。</span></p></div>
  </div>
- <div class="loop">↺ Feedback loop: disagreements are codified as new rules or boundary cases for the next iteration.</div>
+ <div class="loop"><span data-l="en">↺ Feedback loop: disagreements are codified as new rules or boundary cases for the next iteration.</span><span data-l="zh">↺ 反馈循环：出现的分歧被整理成新规则或边界案例，进入下一轮迭代。</span></div>
 </section>
 
 <section id="method">
- <h2>Method development</h2>
+ <h2><span data-l="en">Method development</span><span data-l="zh">方法构建</span></h2>
  <div class="panel"><ul>
-  <li>Reviewed existing systems and selected <b>PubTator3</b> as the comparison baseline.</li>
-  <li>Developed extraction rules on <b>5 pilot papers</b>, iterating from Skill 1.0 to 1.3, and curated <b>35 boundary cases</b> to validate rule behavior.</li>
-  <li>Condensed the full rules into a compact <b>decision card</b> to reduce token usage and request turns, confirming that it matches the full rules (<b>110/112</b> boundary-case decisions agree, stable across 3 runs).</li>
-  <li>Evaluated design variants in a controlled <b>A/B test</b> on a fixed set of 12 papers.</li>
-  <li>Executed the final configuration across <b>all 100 papers</b> and benchmarked accuracy on the expert-annotated <b>BioRED</b> corpus.</li>
+  <li><span data-l="en">Reviewed existing systems and selected <b>PubTator3</b> as the comparison baseline.</span><span data-l="zh">调研现有系统，选定 <b>PubTator3</b> 作为对比基线。</span></li>
+  <li><span data-l="en">Developed extraction rules on <b>5 pilot papers</b>, iterating from Skill 1.0 to 1.3, and curated <b>35 boundary cases</b> to validate rule behavior.</span><span data-l="zh">在 <b>5 篇试点论文</b>上制定抽取规则，从 Skill 1.0 迭代到 1.3，并整理出 <b>35 个边界案例</b>来检验规则行为。</span></li>
+  <li><span data-l="en">Condensed the full rules into a compact <b>decision card</b> to reduce token usage and request turns, confirming that it matches the full rules (<b>110/112</b> boundary-case decisions agree, stable across 3 runs).</span><span data-l="zh">把完整规则压缩成一张精简的<b>判定卡</b>，以减少 token 用量和请求轮数，并确认它与完整规则一致（<b>110/112</b> 个边界案例判定相同，3 次运行结果稳定）。</span></li>
+  <li><span data-l="en">Evaluated design variants in a controlled <b>A/B test</b> on a fixed set of 12 papers.</span><span data-l="zh">在固定的 12 篇论文上用对照 <b>A/B 测试</b>比较不同设计。</span></li>
+  <li><span data-l="en">Executed the final configuration across <b>all 100 papers</b> and benchmarked accuracy on the expert-annotated <b>BioRED</b> corpus.</span><span data-l="zh">用最终配置跑完<b>全部 100 篇论文</b>，并在专家标注的 <b>BioRED</b> 语料上测量准确率。</span></li>
  </ul></div>
 </section>
 
 <section id="cost">
- <h2>Cost-effective optimization</h2>
- <p class="kicker">Model: Claude Opus 5.5. Costs reflect CLI-reported list prices, including repair requests.</p>
+ <h2><span data-l="en">Cost-effective optimization</span><span data-l="zh">成本优化</span></h2>
+ <p class="kicker"><span data-l="en">Model: Claude Opus 5.5. Costs reflect CLI-reported list prices, including repair requests.</span><span data-l="zh">模型：Claude Opus 5.5。成本为 CLI 报告的标价，包含修正请求。</span></p>
  <div class="panel bars" id="costbars"></div>
- <p class="note">Each row is measured on its labeled paper set; the 100-paper average includes long papers and all repair requests.</p>
+ <p class="note"><span data-l="en">Each row is measured on its labeled paper set; the 100-paper average includes long papers and all repair requests.</span><span data-l="zh">每一行都在其标注的论文集上测得；100 篇的平均值包含长论文和全部修正请求。</span></p>
  <div class="grid2" style="margin-top:16px">
-  <div class="panel"><h3>What changed</h3><ul>
-   <li>Tracked model behavior across 5 baseline papers before and after each optimization.</li>
-   <li>Built a deterministic toolkit so the model does not need to locate text spans or compute offsets.</li>
-   <li><b>One request</b> replaces multi-turn agent interaction.</li>
-   <li>Compressed the skill rules (input <b>20k → 9k tokens</b>) and served them as a cached system prompt.</li>
+  <div class="panel"><h3><span data-l="en">What changed</span><span data-l="zh">做了哪些优化</span></h3><ul>
+   <li><span data-l="en">Tracked model behavior across 5 baseline papers before and after each optimization.</span><span data-l="zh">在 5 篇基准论文上跟踪每次优化前后的模型行为。</span></li>
+   <li><span data-l="en">Built a deterministic toolkit so the model does not need to locate text spans or compute offsets.</span><span data-l="zh">构建确定性的工具包，模型不必自己定位文本或计算字符位置。</span></li>
+   <li><span data-l="en"><b>One request</b> replaces multi-turn agent interaction.</span><span data-l="zh"><b>一次请求</b>取代多轮 agent 交互。</span></li>
+   <li><span data-l="en">Compressed the skill rules (input <b>20k → 9k tokens</b>) and served them as a cached system prompt.</span><span data-l="zh">压缩 skill 规则（输入 <b>20k → 9k tokens</b>），并作为缓存的系统提示词发送。</span></li>
   </ul></div>
-  <div class="panel"><h3>Output savings</h3><ul>
-   <li>Restricted the output schema to essential fields: entities, evidence, and pairs.</li>
-   <li>The model cites <b>sentence numbers</b> rather than copying text; a post-processing script reconstructs quotes and offsets from the paper.</li>
-   <li>Segmented extra-long inputs (conference proceedings) into chunks.</li>
+  <div class="panel"><h3><span data-l="en">Output savings</span><span data-l="zh">输出精简</span></h3><ul>
+   <li><span data-l="en">Restricted the output schema to essential fields: entities, evidence, and pairs.</span><span data-l="zh">输出格式只保留必要字段：实体、证据和配对。</span></li>
+   <li><span data-l="en">The model cites <b>sentence numbers</b> rather than copying text; a post-processing script reconstructs quotes and offsets from the paper.</span><span data-l="zh">模型引用<b>句子编号</b>而不复制原文；后处理脚本从论文中重建引文和字符位置。</span></li>
+   <li><span data-l="en">Segmented extra-long inputs (conference proceedings) into chunks.</span><span data-l="zh">超长输入（会议论文集）分段发送。</span></li>
   </ul></div>
  </div>
 </section>
 
 <section id="pipeline">
- <h2>How one request replaces a multi-turn conversation</h2>
+ <h2><span data-l="en">How one request replaces a multi-turn conversation</span><span data-l="zh">一次请求如何取代多轮对话</span></h2>
  <div class="flow">
-  <div class="step"><span class="n">1</span><b>Script packs the input</b><p>Combines the rules, the paper's numbered blocks and sentences, and the output schema into one prompt.</p></div>
-  <div class="step"><span class="n">2</span><b>Model answers once</b><p>Produces a concise structured judgment without tool calls, file reads, or shell commands.</p></div>
-  <div class="step"><span class="n">3</span><b>Script does the rest</b><p>The toolkit resolves entity names, computes offsets, populates the gene × disease matrix, and validates the format.</p></div>
-  <div class="step"><span class="n">4</span><b>One repair, only on error</b><p>If validation detects errors (e.g., a mismatched citation), the error list is returned to the model once for correction.</p></div>
+  <div class="step"><span class="n">1</span><b><span data-l="en">Script packs the input</span><span data-l="zh">脚本打包输入</span></b><p><span data-l="en">Combines the rules, the paper's numbered blocks and sentences, and the output schema into one prompt.</span><span data-l="zh">把规则、论文的编号文本块与句子，以及输出格式合成一条提示词。</span></p></div>
+  <div class="step"><span class="n">2</span><b><span data-l="en">Model answers once</span><span data-l="zh">模型只回答一次</span></b><p><span data-l="en">Produces a concise structured judgment without tool calls, file reads, or shell commands.</span><span data-l="zh">输出一份简洁的结构化判断，不调用工具、不读文件、不执行命令。</span></p></div>
+  <div class="step"><span class="n">3</span><b><span data-l="en">Script does the rest</span><span data-l="zh">脚本完成其余工作</span></b><p><span data-l="en">The toolkit resolves entity names, computes offsets, populates the gene × disease matrix, and validates the format.</span><span data-l="zh">工具包定位实体名称、计算字符位置、补全基因 × 疾病矩阵并校验格式。</span></p></div>
+  <div class="step"><span class="n">4</span><b><span data-l="en">One repair, only on error</span><span data-l="zh">仅在出错时修正一次</span></b><p><span data-l="en">If validation detects errors (e.g., a mismatched citation), the error list is returned to the model once for correction.</span><span data-l="zh">若校验发现错误（例如引文对不上），把错误清单发回模型修正一次。</span></p></div>
  </div>
 </section>
 
 <section id="ab">
- <h2>A/B test: rule compression and thinking intensity</h2>
- <p class="kicker">12 papers, frozen before testing: 7 research articles (2 short, 3 medium, 2 long), 2 case reports (one in Spanish), 2 reviews, and 1 brief report. Evaluated with the same model at one request per paper.</p>
+ <h2><span data-l="en">A/B test: rule compression and thinking intensity</span><span data-l="zh">A/B 测试：规则压缩与推理强度</span></h2>
+ <p class="kicker"><span data-l="en">12 papers, frozen before testing: 7 research articles (2 short, 3 medium, 2 long), 2 case reports (one in Spanish), 2 reviews, and 1 brief report. Evaluated with the same model at one request per paper.</span><span data-l="zh">12 篇论文，测试前冻结：7 篇研究论文（2 短、3 中、2 长）、2 篇病例报告（其中 1 篇为西班牙语）、2 篇综述和 1 篇简报。使用同一模型，每篇一次请求。</span></p>
  <div class="panel scroll"><table>
-  <tr><th></th><th class="num">V1 · card, medium</th><th class="num">V2 · full rules, medium</th><th class="num">V3 · card, low</th></tr>
-  <tr><td>Cost, 12 papers</td><td class="num">$3.55</td><td class="num">$4.01</td><td class="num"><b>$2.71</b></td></tr>
-  <tr><td>Model time</td><td class="num">719 s</td><td class="num">740 s</td><td class="num"><b>303 s</b></td></tr>
-  <tr><td>Supported relations</td><td class="num"><b>64</b></td><td class="num">54</td><td class="num">56</td></tr>
-  <tr><td>Uncertain / negative pairs</td><td class="num">28 / 1</td><td class="num">20 / 11</td><td class="num">15 / 1</td></tr>
-  <tr><td>Pair-status agreement with V1</td><td class="num">—</td><td class="num">0.976</td><td class="num">0.985</td></tr>
+  <tr><th></th><th class="num"><span data-l="en">V1 · card, medium</span><span data-l="zh">V1 · 判定卡，中等推理</span></th><th class="num"><span data-l="en">V2 · full rules, medium</span><span data-l="zh">V2 · 完整规则，中等推理</span></th><th class="num"><span data-l="en">V3 · card, low</span><span data-l="zh">V3 · 判定卡，低推理</span></th></tr>
+  <tr><td><span data-l="en">Cost, 12 papers</span><span data-l="zh">成本（12 篇）</span></td><td class="num">$3.55</td><td class="num">$4.01</td><td class="num"><b>$2.71</b></td></tr>
+  <tr><td><span data-l="en">Model time</span><span data-l="zh">模型时间</span></td><td class="num">719 s</td><td class="num">740 s</td><td class="num"><b>303 s</b></td></tr>
+  <tr><td><span data-l="en">Supported relations</span><span data-l="zh">Supported 关系</span></td><td class="num"><b>64</b></td><td class="num">54</td><td class="num">56</td></tr>
+  <tr><td><span data-l="en">Uncertain / negative pairs</span><span data-l="zh">Uncertain / negative 配对</span></td><td class="num">28 / 1</td><td class="num">20 / 11</td><td class="num">15 / 1</td></tr>
+  <tr><td><span data-l="en">Pair-status agreement with V1</span><span data-l="zh">与 V1 的配对状态一致率</span></td><td class="num">—</td><td class="num">0.976</td><td class="num">0.985</td></tr>
  </table></div>
- <div class="callout"><b>Takeaways</b><ul>
-  <li><b>Compressing the rules into a card preserves the method's behavior.</b> V1 and V2 agree on 97.6% of pairs, while V1 reduces cost by 11%. Most of V2's 11 negative pairs stem from variant-vs-variant comparisons in one paper—a boundary ambiguity logged for the next rule revision.</li>
-  <li><b>Low thinking is about 2.4× faster and 24% cheaper</b> with 98.5% agreement, but recovers fewer supported relations (56 vs 64) and fewer uncertain flags (15 vs 28).</li>
-  <li><b>V1 was selected</b> because it identifies the most supported relations at a moderate cost; it was subsequently run on all 100 papers.</li>
+ <div class="callout"><b><span data-l="en">Takeaways</span><span data-l="zh">结论</span></b><ul>
+  <li><span data-l="en"><b>Compressing the rules into a card preserves the method's behavior.</b> V1 and V2 agree on 97.6% of pairs, while V1 reduces cost by 11%. Most of V2's 11 negative pairs stem from variant-vs-variant comparisons in one paper—a boundary ambiguity logged for the next rule revision.</span><span data-l="zh"><b>把规则压缩成判定卡不改变方法的行为。</b>V1 与 V2 在 97.6% 的配对上一致，V1 便宜 11%。V2 的 11 个 negative 配对大多来自同一篇论文中"变异与变异"的比较，这是规则的一个边界模糊之处，已记录，待下一版规则处理。</span></li>
+  <li><span data-l="en"><b>Low thinking is about 2.4× faster and 24% cheaper</b> with 98.5% agreement, but recovers fewer supported relations (56 vs 64) and fewer uncertain flags (15 vs 28).</span><span data-l="zh"><b>低推理强度约快 2.4 倍、便宜 24%</b>，一致率 98.5%，但 supported 关系更少（56 对 64），uncertain 标记也更少（15 对 28）。</span></li>
+  <li><span data-l="en"><b>V1 was selected</b> because it identifies the most supported relations at a moderate cost; it was subsequently run on all 100 papers.</span><span data-l="zh"><b>最终选择 V1</b>：它以中等成本找到最多的 supported 关系，随后用于全部 100 篇论文。</span></li>
  </ul></div>
 </section>
 
 <section id="pubtator">
- <h2>Our method vs PubTator3 (same 12 papers)</h2>
- <p class="kicker">Both systems processed the same parsed full text with entities aligned by character position; neither is treated as ground truth.</p>
+ <h2><span data-l="en">Our method vs PubTator3 (same 12 papers)</span><span data-l="zh">我们的方法与 PubTator3 对比（同样 12 篇）</span></h2>
+ <p class="kicker"><span data-l="en">Both systems processed the same parsed full text with entities aligned by character position; neither is treated as ground truth.</span><span data-l="zh">两个系统处理同样解析后的全文，实体按字符位置对齐；两者都不作为标准答案。</span></p>
  <div class="tiles">
-  <div class="tile"><div class="k">Relations reported</div><div class="v">64 vs 23</div><div class="s">ours vs PubTator3; 11 found by both</div></div>
-  <div class="tile"><div class="k">Beyond the abstract</div><div class="v">81%</div><div class="s">of our relations rest on body text, tables or captions</div></div>
-  <div class="tile"><div class="k">With quoted evidence</div><div class="v">64 vs 0</div><div class="s">PubTator3 gives a prediction score only</div></div>
+  <div class="tile"><div class="k"><span data-l="en">Relations reported</span><span data-l="zh">报告的关系</span></div><div class="v">64 vs 23</div><div class="s"><span data-l="en">ours vs PubTator3; 11 found by both</span><span data-l="zh">我们 vs PubTator3；两者共同找到 11 条</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Beyond the abstract</span><span data-l="zh">摘要以外</span></div><div class="v">81%</div><div class="s"><span data-l="en">of our relations rest on body text, tables or captions</span><span data-l="zh">我们的关系依据正文、表格或图注</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">With quoted evidence</span><span data-l="zh">附原文证据</span></div><div class="v">64 vs 0</div><div class="s"><span data-l="en">PubTator3 gives a prediction score only</span><span data-l="zh">PubTator3 只给预测分数</span></div></div>
  </div>
  <div class="grid2">
-  <div class="panel"><h3>Pros</h3><ul class="pros">
-   <li>Extracts 2.8× more relations, each anchored to its supporting sentence.</li>
-   <li>81% are supported by full-text content beyond the abstract: body text, tables, and captions.</li>
-   <li>Distinguishes novel study findings from background knowledge and flags weak evidence as uncertain (28 pairs).</li>
-   <li>Separates clinical symptoms from diseases.</li>
-   <li>Processes a Spanish-language paper in which PubTator3 detected no genes.</li>
+  <div class="panel"><h3><span data-l="en">Pros</span><span data-l="zh">优点</span></h3><ul class="pros">
+   <li><span data-l="en">Extracts 2.8× more relations, each anchored to its supporting sentence.</span><span data-l="zh">抽取的关系多 2.8 倍，每条都对应支撑它的句子。</span></li>
+   <li><span data-l="en">81% are supported by full-text content beyond the abstract: body text, tables, and captions.</span><span data-l="zh">81% 的关系依据摘要以外的全文内容：正文、表格和图注。</span></li>
+   <li><span data-l="en">Distinguishes novel study findings from background knowledge and flags weak evidence as uncertain (28 pairs).</span><span data-l="zh">区分研究本身的新发现与背景知识，并把证据不足的配对标为 uncertain（28 对）。</span></li>
+   <li><span data-l="en">Separates clinical symptoms from diseases.</span><span data-l="zh">把临床症状与疾病区分开。</span></li>
+   <li><span data-l="en">Processes a Spanish-language paper in which PubTator3 detected no genes.</span><span data-l="zh">能处理一篇西班牙语论文，而 PubTator3 在其中没有识别出任何基因。</span></li>
   </ul></div>
-  <div class="panel"><h3>Cons</h3><ul class="cons">
-   <li>Requires about $0.30 and 1 minute per paper, whereas PubTator3 is free and precomputed.</li>
-   <li>Misses 12 relations reported by PubTator3: 3 treat a symptom as the disease, 4 were judged too weakly supported, and 5 involve a gene or disease our method did not record.</li>
-   <li>No database IDs (NCBI Gene / MeSH).</li>
+  <div class="panel"><h3><span data-l="en">Cons</span><span data-l="zh">缺点</span></h3><ul class="cons">
+   <li><span data-l="en">Requires about $0.30 and 1 minute per paper, whereas PubTator3 is free and precomputed.</span><span data-l="zh">每篇约需 $0.30 和 1 分钟，而 PubTator3 免费且已预先计算好。</span></li>
+   <li><span data-l="en">Misses 12 relations reported by PubTator3: 3 treat a symptom as the disease, 4 were judged too weakly supported, and 5 involve a gene or disease our method did not record.</span><span data-l="zh">漏掉 PubTator3 报告的 12 条关系：3 条把症状当作疾病，4 条被我们判为证据太弱，5 条涉及我们没有记录的基因或疾病。</span></li>
+   <li><span data-l="en">No database IDs (NCBI Gene / MeSH).</span><span data-l="zh">没有数据库 ID（NCBI Gene / MeSH）。</span></li>
   </ul></div>
  </div>
 </section>
 
 <section id="full100">
- <h2>Result on all 100 papers</h2>
+ <h2><span data-l="en">Result on all 100 papers</span><span data-l="zh">100 篇论文的结果</span></h2>
  <div class="tiles">
-  <div class="tile"><div class="k">Cost</div><div class="v">$43.67</div><div class="s">2.2 model hours · $0.44 and 78 s per paper</div></div>
-  <div class="tile"><div class="k">Passed validation</div><div class="v">100 / 100</div><div class="s">69 on the first request, 31 after one repair</div></div>
-  <div class="tile"><div class="k">Relations</div><div class="v">972</div><div class="s">supported; plus 451 uncertain, 47 explicitly negative</div></div>
-  <div class="tile"><div class="k">vs PubTator3</div><div class="v">972 vs 198</div><div class="s">90% of ours rest on text beyond the abstract</div></div>
+  <div class="tile"><div class="k"><span data-l="en">Cost</span><span data-l="zh">成本</span></div><div class="v">$43.67</div><div class="s"><span data-l="en">2.2 model hours · $0.44 and 78 s per paper</span><span data-l="zh">模型时间 2.2 小时 · 每篇 $0.44、78 秒</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Passed validation</span><span data-l="zh">通过校验</span></div><div class="v">100 / 100</div><div class="s"><span data-l="en">69 on the first request, 31 after one repair</span><span data-l="zh">69 篇一次通过，31 篇修正一次后通过</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Relations</span><span data-l="zh">关系</span></div><div class="v">972</div><div class="s"><span data-l="en">supported; plus 451 uncertain, 47 explicitly negative</span><span data-l="zh">supported；另有 451 对 uncertain、47 对 explicit_negative</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">vs PubTator3</span><span data-l="zh">对比 PubTator3</span></div><div class="v">972 vs 198</div><div class="s"><span data-l="en">90% of ours rest on text beyond the abstract</span><span data-l="zh">我们的关系 90% 依据摘要以外的文本</span></div></div>
  </div>
  <div class="grid2">
-  <div class="panel"><h3>Problem: repair requests</h3><p>Minor output-format deviations initially triggered token-consuming repair requests; the parser was updated to tolerate common syntax slips (fixed).</p></div>
-  <div class="panel"><h3>Why 25 papers have no supported relation</h3>
-   <p>These articles do not investigate gene–disease associations; they represent true negatives rather than missed detections.</p>
-   <ul><li>8 mention no genes at all (e.g., dialysis timing, adolescent gambling, nanoparticle chemistry).</li>
-   <li>8 mention genes but no diseases (e.g., fly chromatin, worm oocytes, plant transcriptomes).</li>
-   <li>9 mention both entities, but no pair is supported by the text (e.g., genes used solely as assay markers or in speculative discussion).</li></ul>
-   <p>Consistent with this, PubTator3 reported almost no relations in the same 25 papers (one in total).</p></div>
+  <div class="panel"><h3><span data-l="en">Problem: repair requests</span><span data-l="zh">问题：修正请求</span></h3><p><span data-l="en">Minor output-format deviations initially triggered token-consuming repair requests; the parser was updated to tolerate common syntax slips (fixed).</span><span data-l="zh">输出格式的小偏差起初会触发消耗 token 的修正请求；已更新解析器，容忍常见的格式小错（已修复）。</span></p></div>
+  <div class="panel"><h3><span data-l="en">Why 25 papers have no supported relation</span><span data-l="zh">为什么 25 篇没有 supported 关系</span></h3>
+   <p><span data-l="en">These articles do not investigate gene–disease associations; they represent true negatives rather than missed detections.</span><span data-l="zh">这些论文本身不研究基因–疾病关联：它们是真阴性，而不是漏判。</span></p>
+   <ul><li><span data-l="en">8 mention no genes at all (e.g., dialysis timing, adolescent gambling, nanoparticle chemistry).</span><span data-l="zh">8 篇完全没有提到基因（例如透析开始时机、青少年赌博、纳米颗粒化学）。</span></li>
+   <li><span data-l="en">8 mention genes but no diseases (e.g., fly chromatin, worm oocytes, plant transcriptomes).</span><span data-l="zh">8 篇提到了基因但没有疾病（例如果蝇染色质、线虫卵母细胞、植物转录组）。</span></li>
+   <li><span data-l="en">9 mention both entities, but no pair is supported by the text (e.g., genes used solely as assay markers or in speculative discussion).</span><span data-l="zh">9 篇两者都有，但文中没有任何一对得到支持（例如基因只作为检测指标，或只出现在推测性讨论中）。</span></li></ul>
+   <p><span data-l="en">Consistent with this, PubTator3 reported almost no relations in the same 25 papers (one in total).</span><span data-l="zh">与此一致，PubTator3 在这 25 篇论文中也几乎没有预测出关系（合计 1 条）。</span></p></div>
  </div>
 </section>
 
 <section id="biored">
- <h2>Result on the BioRED benchmark</h2>
- <p class="kicker">BioRED comprises 419 expert-annotated PubMed abstracts containing 1,633 gene–disease relations (every abstract in the corpus that has one). Without training or tuning on BioRED, we ran the same frozen V1 pipeline used for the 100 papers at a cost of $0.056 per abstract.</p>
+ <h2><span data-l="en">Result on the BioRED benchmark</span><span data-l="zh">BioRED 基准上的结果</span></h2>
+ <p class="kicker"><span data-l="en">BioRED comprises 419 expert-annotated PubMed abstracts containing 1,633 gene–disease relations (every abstract in the corpus that has one). Without training or tuning on BioRED, we ran the same frozen V1 pipeline used for the 100 papers at a cost of $0.056 per abstract.</span><span data-l="zh">BioRED 中有 419 篇专家标注的 PubMed 摘要，共 1,633 条基因–疾病关系（即语料中所有含此类关系的摘要）。我们没有在 BioRED 上做任何训练或调整，直接使用跑 100 篇论文时冻结的 V1，每篇摘要成本 $0.056。</span></p>
  <div class="grid2">
   <div class="panel scroll"><table>
-   <tr><th></th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th></tr>
-   <tr><td>Strict (supported only)</td><td class="num"><b>0.89</b></td><td class="num">0.43</td><td class="num">0.58</td></tr>
-   <tr><td>Supported + uncertain</td><td class="num">0.81</td><td class="num">0.58</td><td class="num">0.68</td></tr>
+   <tr><th></th><th class="num"><span data-l="en">Precision</span><span data-l="zh">精确率</span></th><th class="num"><span data-l="en">Recall</span><span data-l="zh">召回率</span></th><th class="num">F1</th></tr>
+   <tr><td><span data-l="en">Strict (supported only)</span><span data-l="zh">严格口径（只算 supported）</span></td><td class="num"><b>0.89</b></td><td class="num">0.43</td><td class="num">0.58</td></tr>
+   <tr><td><span data-l="en">Supported + uncertain</span><span data-l="zh">supported + uncertain</span></td><td class="num">0.81</td><td class="num">0.58</td><td class="num">0.68</td></tr>
   </table></div>
   <div class="panel"><ul>
-   <li><b>Consistent across Train / Dev / Test splits:</b> F1 is 0.58 / 0.61 / 0.54, with overlapping 95% confidence intervals.</li>
-   <li><b>Matches PubTator3 precision</b> on 50 test abstracts (0.84 vs 0.83), even though PubTator3 is trained on BioRED. PubTator3's recall is higher (0.65 vs 0.41).</li>
-   <li><b>Why our recall is lower:</b> 59% of the missed relations are pairs our method evaluated and deliberately classified as <i>not_found</i> or <i>uncertain</i>; the remainder mostly involve symptoms or broad terms (e.g., "tumor", "infection") that BioRED annotates as diseases.</li>
+   <li><span data-l="en"><b>Consistent across Train / Dev / Test splits:</b> F1 is 0.58 / 0.61 / 0.54, with overlapping 95% confidence intervals.</span><span data-l="zh"><b>在 Train / Dev / Test 三部分上结果一致：</b>F1 分别为 0.58 / 0.61 / 0.54，95% 置信区间相互重叠。</span></li>
+   <li><span data-l="en"><b>Matches PubTator3 precision</b> on 50 test abstracts (0.84 vs 0.83), even though PubTator3 is trained on BioRED. PubTator3's recall is higher (0.65 vs 0.41).</span><span data-l="zh"><b>精确率与 PubTator3 持平</b>：50 篇测试摘要上为 0.84 对 0.83，而 PubTator3 是用 BioRED 训练过的。PubTator3 的召回率更高（0.65 对 0.41）。</span></li>
+   <li><span data-l="en"><b>Why our recall is lower:</b> 59% of the missed relations are pairs our method evaluated and deliberately classified as <i>not_found</i> or <i>uncertain</i>; the remainder mostly involve symptoms or broad terms (e.g., "tumor", "infection") that BioRED annotates as diseases.</span><span data-l="zh"><b>为什么我们的召回率较低：</b>漏掉的关系中，59% 是我们评估过、刻意判为 <i>not_found</i> 或 <i>uncertain</i> 的配对；其余大多是 BioRED 标为疾病的症状或宽泛术语（如 "tumor"、"infection"）。</span></li>
   </ul></div>
  </div>
 </section>
 
 <section id="graphs">
- <h2>Gene–disease bipartite graphs</h2>
- <p class="kicker">The task's final output: one bipartite graph per paper, with genes on one side, diseases on the other, and a link wherever the paper supports a relation. Every link carries its evidence sentence and source label.</p>
+ <h2><span data-l="en">Gene–disease bipartite graphs</span><span data-l="zh">基因–疾病二部图</span></h2>
+ <p class="kicker"><span data-l="en">The task's final output: one bipartite graph per paper, with genes on one side, diseases on the other, and a link wherever the paper supports a relation. Every link carries its evidence sentence and source label.</span><span data-l="zh">任务的最终产出：每篇论文一张二部图，一侧是基因，另一侧是疾病，论文支持的关系就连一条线。每条连线都带有证据句和来源标签。</span></p>
  <div class="links">
-  <a href="graphs/index.html">100 full-text papers<span>972 supported links; uncertain and negative pairs on request</span></a>
-  <a href="graphs/index.html#biored">BioRED · 419 abstracts<span>Our graph overlaid on the expert gold relations: confirmed, not in gold, missed</span></a>
+  <a href="graphs/index.html"><span data-l="en">100 full-text papers</span><span data-l="zh">100 篇全文论文</span><span><span data-l="en">972 supported links; uncertain and negative pairs on request</span><span data-l="zh">972 条 supported 连线；可选择显示 uncertain 和 negative 配对</span></span></a>
+  <a href="graphs/merged.html"><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇合并为一张图</span><span><span data-l="en">Every supported link merged into one network; thicker lines are supported by more papers</span><span data-l="zh">所有 supported 连线合并成一个网络；支持的论文越多，线越粗</span></span></a>
+  <a href="graphs/index.html#biored"><span data-l="en">BioRED · 419 abstracts</span><span data-l="zh">BioRED · 419 篇摘要</span><span><span data-l="en">Our graph overlaid on the expert gold relations: confirmed, not in gold, missed</span><span data-l="zh">我们的图叠加在专家标注上：已确认、不在标准答案中、漏掉</span></span></a>
  </div>
 </section>
 
 <section id="next">
- <h2>What's next</h2>
+ <h2><span data-l="en">What's next</span><span data-l="zh">下一步</span></h2>
  <div class="grid2">
-  <div class="panel"><h3>Compare different models</h3><p>Evaluate GPT-6.1 Sol, GPT-6 Astra, and additional models on the same benchmark to assess cross-model generalizability and cost–accuracy trade-offs.</p></div>
-  <div class="panel"><h3>A cheaper two-stage setup</h3><p>Use a local model such as Qwen-3.8 27B for initial extraction, reserving a commercial model to verify accuracy and completeness.</p></div>
+  <div class="panel"><h3><span data-l="en">Compare different models</span><span data-l="zh">比较不同模型</span></h3><p><span data-l="en">Evaluate GPT-6.1 Sol, GPT-6 Astra, and additional models on the same benchmark to assess cross-model generalizability and cost–accuracy trade-offs.</span><span data-l="zh">在同一基准上评估 GPT-6.1 Sol、GPT-6 Astra 及更多模型，考察方法在不同模型上的通用性，以及成本与准确率的权衡。</span></p></div>
+  <div class="panel"><h3><span data-l="en">A cheaper two-stage setup</span><span data-l="zh">更便宜的两阶段方案</span></h3><p><span data-l="en">Use a local model such as Qwen-3.8 27B for initial extraction, reserving a commercial model to verify accuracy and completeness.</span><span data-l="zh">用 Qwen-3.8 27B 等本地模型做初步抽取，只用商业模型核实准确性和完整性。</span></p></div>
  </div>
 </section>
 
 <section id="pages">
- <h2>Interactive result pages</h2>
+ <h2><span data-l="en">Interactive result pages</span><span data-l="zh">交互结果页</span></h2>
+ <p class="note" data-l="zh">以下结果页为英文。</p>
  <div class="links">
-  <a href="results/ab/ab_summary.html">A/B test summary<span>V1 vs V2 vs V3 on the 12 frozen papers</span></a>
-  <a href="results/ab/v1_card_lean_medium/vs_pubtator.html">12 papers vs PubTator3<span>Every relation disagreement, with our evidence</span></a>
-  <a href="results/full100/vs_pubtator.html">100 papers vs PubTator3<span>Full-run comparison (about 1 MB, may take a moment)</span></a>
-  <a href="results/biored/biored_results.html">BioRED accuracy<span>419 abstracts, per split, and the head-to-head with PubTator3</span></a>
-  <a href="graphs/index.html">Bipartite graphs<span>One gene–disease graph per paper, for the 100 papers and BioRED</span></a>
+  <a href="results/ab/ab_summary.html"><span data-l="en">A/B test summary</span><span data-l="zh">A/B 测试汇总</span><span><span data-l="en">V1 vs V2 vs V3 on the 12 frozen papers</span><span data-l="zh">12 篇冻结论文上的 V1、V2、V3 对比</span></span></a>
+  <a href="results/ab/v1_card_lean_medium/vs_pubtator.html"><span data-l="en">12 papers vs PubTator3</span><span data-l="zh">12 篇与 PubTator3 对比</span><span><span data-l="en">Every relation disagreement, with our evidence</span><span data-l="zh">每一条关系分歧，附我们的证据</span></span></a>
+  <a href="results/full100/vs_pubtator.html"><span data-l="en">100 papers vs PubTator3</span><span data-l="zh">100 篇与 PubTator3 对比</span><span><span data-l="en">Full-run comparison (about 1 MB, may take a moment)</span><span data-l="zh">全量运行对比（约 1 MB，加载需稍等）</span></span></a>
+  <a href="results/biored/biored_results.html"><span data-l="en">BioRED accuracy</span><span data-l="zh">BioRED 准确率</span><span><span data-l="en">419 abstracts, per split, and the head-to-head with PubTator3</span><span data-l="zh">419 篇摘要、按数据部分统计，以及与 PubTator3 的正面对比</span></span></a>
+  <a href="graphs/index.html"><span data-l="en">Bipartite graphs</span><span data-l="zh">二部图</span><span><span data-l="en">One gene–disease graph per paper, for the 100 papers and BioRED</span><span data-l="zh">100 篇论文和 BioRED 的逐篇基因–疾病图</span></span></a>
  </div>
 </section>
 
 <footer>
- Code repository: github.com/Suzuka2788/GeneDiseaseTrace-LLM (private; access on request). Input papers are not redistributed here.
- BioRED: Luo et al., <i>Briefings in Bioinformatics</i> 2022 (public domain, NCBI). PubTator3: NCBI.
+ <span data-l="en">Code repository: github.com/Suzuka2788/GeneDiseaseTrace-LLM (private; access on request). Input papers are not redistributed here. BioRED: Luo et al., <i>Briefings in Bioinformatics</i> 2022 (public domain, NCBI). PubTator3: NCBI.</span><span data-l="zh">代码仓库：github.com/Suzuka2788/GeneDiseaseTrace-LLM（私有，可申请访问）。本站不转载输入论文。BioRED：Luo et al., <i>Briefings in Bioinformatics</i> 2022（公有领域，NCBI）。PubTator3：NCBI。</span>
 </footer>
 </main>
 <script>
 // Cost per paper by stage (measured; see the labels for the paper set behind each row).
 const COST = [
- ["Agent mode", "multi-turn, tools; one case report", 1.26, "4.3 min"],
- ["Single request · V1", "card + medium thinking; 12-paper average", 0.30, "60 s"],
- ["Single request · V3", "card + low thinking; 12-paper average", 0.23, "25 s"],
- ["Final run · V1", "all 100 papers, incl. long ones and repairs", 0.44, "78 s"],
- ["BioRED abstract · V1", "419 abstracts (title + abstract only)", 0.056, "23 s"],
+ [{en: "Agent mode", zh: "Agent 模式"}, {en: "multi-turn, tools; one case report", zh: "多轮对话、调用工具；一篇病例报告"}, 1.26, {en: "4.3 min", zh: "4.3 分钟"}],
+ [{en: "Single request · V1", zh: "单次请求 · V1"}, {en: "card + medium thinking; 12-paper average", zh: "判定卡 + 中等推理；12 篇平均"}, 0.30, {en: "60 s", zh: "60 秒"}],
+ [{en: "Single request · V3", zh: "单次请求 · V3"}, {en: "card + low thinking; 12-paper average", zh: "判定卡 + 低推理；12 篇平均"}, 0.23, {en: "25 s", zh: "25 秒"}],
+ [{en: "Final run · V1", zh: "正式运行 · V1"}, {en: "all 100 papers, incl. long ones and repairs", zh: "全部 100 篇，含长论文和修正请求"}, 0.44, {en: "78 s", zh: "78 秒"}],
+ [{en: "BioRED abstract · V1", zh: "BioRED 摘要 · V1"}, {en: "419 abstracts (title + abstract only)", zh: "419 篇摘要（仅标题和摘要）"}, 0.056, {en: "23 s", zh: "23 秒"}],
 ];
-const box = document.getElementById("costbars"), max = Math.max(...COST.map(c => c[2]));
-COST.forEach(([name, sub, usd, time]) => {
-  const row = document.createElement("div"); row.className = "row";
-  const label = document.createElement("div"); label.textContent = name;
-  const small = document.createElement("small"); small.textContent = sub; label.append(small);
-  const track = document.createElement("div"); track.className = "track";
-  const fill = document.createElement("div"); fill.className = "fill"; fill.style.width = (85 * usd / max) + "%";
-  const val = document.createElement("span"); val.className = "val"; val.textContent = `$${usd < 0.1 ? usd.toFixed(3) : usd.toFixed(2)} · ${time}`;
-  track.append(fill, val); row.append(label, track); box.append(row);
-});
+function renderCost(lang) {
+  const box = document.getElementById("costbars"), max = Math.max(...COST.map(c => c[2]));
+  box.innerHTML = "";
+  COST.forEach(([name, sub, usd, time]) => {
+    const row = document.createElement("div"); row.className = "row";
+    const label = document.createElement("div"); label.textContent = name[lang];
+    const small = document.createElement("small"); small.textContent = sub[lang]; label.append(small);
+    const track = document.createElement("div"); track.className = "track";
+    const fill = document.createElement("div"); fill.className = "fill"; fill.style.width = (85 * usd / max) + "%";
+    const val = document.createElement("span"); val.className = "val"; val.textContent = `$${usd < 0.1 ? usd.toFixed(3) : usd.toFixed(2)} · ${time[lang]}`;
+    track.append(fill, val); row.append(label, track); box.append(row);
+  });
+}
+
+// Language: ?lang=zh|en, else the visitor's last choice (shared with the graph pages), else English.
+const btn = document.getElementById("langBtn");
+function setLang(lang, remember) {
+  document.documentElement.classList.toggle("zh", lang === "zh");
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+  btn.textContent = lang === "zh" ? "English" : "中文";
+  renderCost(lang);
+  if (remember) { try { localStorage.setItem("gdt-lang", lang); } catch (e) {} }
+}
+let start = new URLSearchParams(location.search).get("lang");
+if (start !== "zh" && start !== "en") { try { start = localStorage.getItem("gdt-lang"); } catch (e) { start = null; } }
+setLang(start === "zh" ? "zh" : "en", false);
+btn.addEventListener("click", () => setLang(document.documentElement.classList.contains("zh") ? "en" : "zh", true));
+
+// Highlight the section in view.
+const navLinks = [...document.querySelectorAll("nav.top .links-row a")];
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    navLinks.forEach(a => {
+      const on = a.getAttribute("href") === "#" + entry.target.id;
+      a.classList.toggle("active", on);
+      if (on) { const row = a.parentElement; if (a.offsetLeft < row.scrollLeft || a.offsetLeft + a.offsetWidth > row.scrollLeft + row.clientWidth) row.scrollLeft = a.offsetLeft - 12; }
+    });
+  });
+}, {rootMargin: "-45% 0px -50% 0px"});
+document.querySelectorAll("main section[id]").forEach(s => observer.observe(s));
 </script>
 </body></html>

@@ -42,28 +42,55 @@ th{color:var(--ink2);font-weight:600}
 #tip{position:fixed;pointer-events:none;background:var(--panel);color:var(--ink);border:1px solid var(--ring);border-radius:6px;padding:8px 10px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.18);display:none;z-index:10;max-width:360px}
 #tip b{display:block;margin-bottom:2px}
 .note{color:var(--ink2);font-size:13px}
+html.zh [data-l="en"],html:not(.zh) [data-l="zh"]{display:none!important}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.topbar a.go{display:inline-flex;align-items:center;gap:6px;text-decoration:none;padding:5px 12px;border:1px solid var(--ring);border-radius:999px;background:var(--panel)}
+.topbar a.go:hover{border-color:var(--c1)}
+.topbar .spacer{flex:1}
+#langBtn{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--ring);background:var(--panel);color:var(--ink);cursor:pointer}
 </style></head><body><main>
-<a href="../index.html">← GeneDiseaseTrace-LLM</a>
-<h1>Gene–disease bipartite graphs</h1>
-<p class="sub">One graph per paper, as the task asks: genes on the left, diseases on the right, a line wherever the paper supports a relation. Hover a line for its evidence; click a gene or disease to highlight its links. Every line is also listed in the table below.</p>
+<div class="topbar"><a class="go" href="../index.html">← GeneDiseaseTrace-LLM</a><a class="go" href="merged.html"><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇合并为一张图</span> →</a><span class="spacer"></span><button id="langBtn" type="button" aria-label="Switch language / 切换语言">中文</button></div>
+<h1><span data-l="en">Gene–disease bipartite graphs</span><span data-l="zh">基因–疾病二部图</span></h1>
+<p class="sub"><span data-l="en">One graph per paper, as the task asks: genes on the left, diseases on the right, a line wherever the paper supports a relation. Hover a line for its evidence; click a gene or disease to highlight its links. Every line is also listed in the table below.</span><span data-l="zh">按任务要求，每篇论文一张图：左边是基因，右边是疾病，论文支持的关系就连一条线。鼠标悬停在连线上可查看证据；点击基因或疾病可突出显示它的连线。所有连线也列在下方表格中。</span></p>
 <div class="tabs" role="group" aria-label="Dataset">
- <button data-set="full100" aria-pressed="true">100 full-text papers</button>
- <button data-set="biored" aria-pressed="false">BioRED · 419 abstracts vs gold</button>
+ <button data-set="full100" aria-pressed="true"><span data-l="en">100 full-text papers</span><span data-l="zh">100 篇全文论文</span></button>
+ <button data-set="biored" aria-pressed="false"><span data-l="en">BioRED · 419 abstracts vs gold</span><span data-l="zh">BioRED · 419 篇摘要 vs 标准答案</span></button>
 </div>
 <div class="controls">
  <input type="search" id="q" placeholder="Filter papers (id, title)" aria-label="Filter papers">
  <select id="paper" aria-label="Paper"></select>
  <button id="prev" aria-label="Previous paper">←</button><button id="next" aria-label="Next paper">→</button>
- <label id="optWeak"><input type="checkbox" id="weak"> show uncertain &amp; negative pairs</label>
- <label><input type="checkbox" id="lonely"> show unlinked entities</label>
+ <label id="optWeak"><input type="checkbox" id="weak"> <span data-l="en">show uncertain &amp; negative pairs</span><span data-l="zh">显示 uncertain 和 negative 配对</span></label>
+ <label><input type="checkbox" id="lonely"> <span data-l="en">show unlinked entities</span><span data-l="zh">显示没有连线的实体</span></label>
 </div>
 <div class="legend" id="legend"></div>
 <div class="panel meta" id="meta"></div>
 <div class="panel" id="graphBox"></div>
-<div class="panel" style="margin-top:12px"><b>Links in this paper</b><div id="tableBox"></div></div>
+<div class="panel" style="margin-top:12px"><b><span data-l="en">Links in this paper</span><span data-l="zh">本篇论文的连线</span></b><div id="tableBox"></div></div>
 <p class="note" id="foot"></p>
 </main><div id="tip"></div>
 <script>
+const ZH = {
+  "Supported · this study's finding": "Supported · 本研究的发现", "Supported · background knowledge": "Supported · 背景知识",
+  "Supported · both": "Supported · 两者兼有", "Supported · source unclear": "Supported · 来源不明",
+  "Uncertain (shown with the toggle)": "Uncertain（打开开关后显示）", "Explicitly negative (shown with the toggle)": "Explicit negative（打开开关后显示）",
+  "Ours, confirmed by BioRED": "我们的关系，BioRED 确认", "Ours, not in the BioRED gold set": "我们的关系，不在 BioRED 标准答案中",
+  "BioRED gold relation we did not report": "我们没有报告的 BioRED 标准关系",
+  "Genes": "基因", "Diseases": "疾病", "Supported": "Supported", "Uncertain": "Uncertain", "Negative": "Negative",
+  "Confirmed by BioRED": "BioRED 确认", "Not in gold": "不在标准答案中", "Gold relations missed": "漏掉的标准关系",
+  "Article type": "文章类型", "BioRED split": "BioRED 数据部分",
+  "No gene or disease entities in this paper's matrix.": "这篇论文的矩阵中没有基因或疾病实体。",
+  "No links in this paper. Turn on \"show unlinked entities\" to see its genes and diseases.": "这篇论文没有连线。打开\"显示没有连线的实体\"可查看其中的基因和疾病。",
+  "Gene": "基因", "Disease": "疾病", "Kind": "类别", "Relation": "关系类型", "BioRED type": "BioRED 类型", "Reason": "理由",
+  "Evidence (first sentence)": "证据（第一句）", "Evidence": "证据", "No links.": "没有连线。", "links": "条连线", "link": "条连线",
+  "BioRED entity": "BioRED 实体", "Loading…": "加载中…", "Filter papers (id, title)": "筛选论文（编号、标题）",
+  "Claude Opus 5.5, frozen variant V1, one request per paper. Entities are those in each paper's gene × disease matrix; symptoms and phenotypes are kept in a separate table and not drawn.":
+    "Claude Opus 5.5，冻结版本 V1，每篇一次请求。图中实体来自每篇论文的基因 × 疾病矩阵；症状和表型单独记录，不画在图中。",
+  "BioRED (Luo et al. 2022) gold gene–disease relations vs our V1 output on the same abstract. Italic grey names are entities only BioRED tagged, named as BioRED wrote them. The reason for each missed relation comes from the scorer (e.g. our pair judged uncertain, or a symptom we keep apart from diseases).":
+    "BioRED（Luo et al. 2022）的标准基因–疾病关系，与我们 V1 在同一篇摘要上的输出对比。灰色斜体名称是只有 BioRED 标注过的实体，名称照 BioRED 原文。每条漏掉关系的原因来自评分脚本（例如我们判为 uncertain，或是我们与疾病分开记录的症状）。理由和证据保留英文原文。",
+};
+let LANG = "en";
+const T = s => (LANG === "zh" && ZH[s]) || s;
 const STYLE = {
   full100: {
     supported_this: ["--c1", "", "Supported · this study's finding"],
@@ -97,10 +124,10 @@ function legend() {
   Object.values(STYLE[set]).forEach(([c, dash, label]) => {
     const s = el("span"); const g = svgEl("svg", {width: 26, height: 10});
     g.append(svgEl("line", {x1: 1, y1: 5, x2: 25, y2: 5, stroke: `var(${c})`, "stroke-width": 2, "stroke-dasharray": dash}));
-    s.append(g, label); box.append(s);
+    s.append(g, T(label)); box.append(s);
   });
   document.getElementById("optWeak").style.display = set === "full100" ? "" : "none";
-  document.getElementById("foot").textContent = FOOT[set];
+  document.getElementById("foot").textContent = T(FOOT[set]);
 }
 
 function visibleEdges(p) {
@@ -115,7 +142,7 @@ function fillSelect() {
   data.papers.forEach((p, i) => {
     if (q && !(p.id.toLowerCase().includes(q) || p.title.toLowerCase().includes(q))) return;
     const n = p.edges.filter(e => set === "biored" ? e.status !== "fn" : e.status === "supported").length;
-    const o = el("option", {value: i}, `${p.id} · ${n} link${n === 1 ? "" : "s"} · ${p.title.slice(0, 70)}${p.title.length > 70 ? "…" : ""}`);
+    const o = el("option", {value: i}, `${p.id} · ${n} ${LANG === "zh" ? T("links") : "link" + (n === 1 ? "" : "s")} · ${p.title.slice(0, 70)}${p.title.length > 70 ? "…" : ""}`);
     if (i === current) o.selected = true; sel.append(o);
   });
   if (sel.options.length && !sel.querySelector("option:checked")) { sel.options[0].selected = true; current = +sel.options[0].value; }
@@ -137,24 +164,24 @@ function render() {
   const meta = document.getElementById("meta"); meta.innerHTML = "";
   const link = set === "full100" ? `https://pmc.ncbi.nlm.nih.gov/articles/${p.id}/` : `https://pubmed.ncbi.nlm.nih.gov/${p.id.slice(4)}/`;
   const h = el("h2"); const a = el("a", {href: link, target: "_blank", rel: "noopener"}, p.id); h.append(a, document.createTextNode(" · " + p.title)); meta.append(h);
-  meta.append(el("div", {class: "m"}, set === "full100" ? `Article type: ${p.type}` : `BioRED split: ${p.type}`));
+  meta.append(el("div", {class: "m"}, set === "full100" ? `${T("Article type")}: ${p.type}` : `${T("BioRED split")}: ${p.type}`));
   const counts = el("div", {class: "counts"}); const c = k => p.edges.filter(e => e.status === k).length;
   const items = set === "full100"
     ? [["Genes", p.nodes.filter(n => n.side === "g").length], ["Diseases", p.nodes.filter(n => n.side === "d").length], ["Supported", c("supported")], ["Uncertain", c("uncertain")], ["Negative", c("explicit_negative")]]
     : [["Confirmed by BioRED", c("tp")], ["Not in gold", c("fp")], ["Gold relations missed", new Set(p.edges.filter(e => e.status === "fn").map(e => e.g + "|" + e.d)).size]];
-  items.forEach(([k, v]) => { const s = el("span"); s.append(k + ": ", el("b", {}, String(v))); counts.append(s); }); meta.append(counts);
+  items.forEach(([k, v]) => { const s = el("span"); s.append(T(k) + ": ", el("b", {}, String(v))); counts.append(s); }); meta.append(counts);
 
   // Graph
   const box = document.getElementById("graphBox"); box.innerHTML = "";
-  if (!p.nodes.length) { box.append(el("div", {class: "empty"}, "No gene or disease entities in this paper's matrix.")); table([], p); return; }
-  if (!edges.length && !lonely) { box.append(el("div", {class: "empty"}, "No links in this paper. Turn on \"show unlinked entities\" to see its genes and diseases.")); table([], p); return; }
+  if (!p.nodes.length) { box.append(el("div", {class: "empty"}, T("No gene or disease entities in this paper's matrix."))); table([], p); return; }
+  if (!edges.length && !lonely) { box.append(el("div", {class: "empty"}, T("No links in this paper. Turn on \"show unlinked entities\" to see its genes and diseases."))); table([], p); return; }
   const ROW = 24, TOP = 34, W = 920, LX = 300, RX = 620, rows = Math.max(genes.length, dis.length), H = TOP + rows * ROW + 10;
   const yG = i => TOP + (rows - genes.length) * ROW / 2 + i * ROW + ROW / 2, yD = i => TOP + (rows - dis.length) * ROW / 2 + i * ROW + ROW / 2;
   const pos = {}; genes.forEach((n, i) => pos[n.id] = [LX, yG(i)]); dis.forEach((n, i) => pos[n.id] = [RX, yD(i)]);
   const svg = svgEl("svg", {viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img", "aria-label": `Bipartite graph of ${p.id}: ${genes.length} genes, ${dis.length} diseases, ${edges.length} links`});
   svg.style.minWidth = "640px";
-  const hg = svgEl("text", {x: LX, y: 18, "text-anchor": "end", class: "head"}); hg.textContent = `Genes (${genes.length})`;
-  const hd = svgEl("text", {x: RX, y: 18, class: "head"}); hd.textContent = `Diseases (${dis.length})`; svg.append(hg, hd);
+  const hg = svgEl("text", {x: LX, y: 18, "text-anchor": "end", class: "head"}); hg.textContent = `${T("Genes")} (${genes.length})`;
+  const hd = svgEl("text", {x: RX, y: 18, class: "head"}); hd.textContent = `${T("Diseases")} (${dis.length})`; svg.append(hg, hd);
   const edgeLayer = svgEl("g"), nodeLayer = svgEl("g"); svg.append(edgeLayer, nodeLayer);
   const edgeEls = [];
   // Draw the faint kinds first so solid lines sit on top.
@@ -167,7 +194,7 @@ function render() {
     const line = svgEl("path", {d, class: "edge", stroke: `var(${c})`, "stroke-dasharray": dash});
     const hit = svgEl("path", {d, class: "edge hit"});
     const gName = p.nodes.find(n => n.id === e.g).name, dName = p.nodes.find(n => n.id === e.d).name;
-    const label = STYLE[set][styleKey(e)][2];
+    const label = T(STYLE[set][styleKey(e)][2]);
     const html = `<b>${esc(gName)} → ${esc(dName)}</b>${esc(label)}${e.rel && e.rel !== "none" ? " · " + esc(e.rel) : ""}${e.why ? "<br>" + esc(e.why) : ""}${e.quote ? "<br><i>“" + esc(e.quote) + "”</i>" : ""}`;
     hit.addEventListener("mouseenter", ev => showTip(ev, html)); hit.addEventListener("mousemove", moveTip); hit.addEventListener("mouseleave", () => tip.style.display = "none");
     edgeLayer.append(line, hit); edgeEls.push([e, line]);
@@ -178,7 +205,7 @@ function render() {
     g.append(svgEl("circle", {cx: x, cy: y, r: 5, fill: deg[n.id] ? "var(--ink)" : "var(--mid)"}));
     const t = svgEl("text", {x: left ? x - 12 : x + 12, y: y + 4, "text-anchor": left ? "end" : "start"});
     const name = n.name.length > 40 ? n.name.slice(0, 39) + "…" : n.name; t.textContent = name;
-    const title = svgEl("title"); title.textContent = `${n.name}${n.gold_only ? " (BioRED entity)" : ""} · ${deg[n.id] || 0} links`; g.append(title, t);
+    const title = svgEl("title"); title.textContent = `${n.name}${n.gold_only ? " (" + T("BioRED entity") + ")" : ""} · ${deg[n.id] || 0} ${T("links")}`; g.append(title, t);
     const toggle = () => { focus = focus === n.id ? null : n.id;
       edgeEls.forEach(([e, line]) => line.classList.toggle("faded", !!focus && e.g !== focus && e.d !== focus));
       nodeLayer.querySelectorAll(".node").forEach(m => m.classList.toggle("faded", !!focus && m !== g && !edgeEls.some(([e]) => (e.g === focus || e.d === focus) && (m.__id === e.g || m.__id === e.d)))); };
@@ -191,20 +218,20 @@ function render() {
 
 function table(edges, p) {
   const box = document.getElementById("tableBox"); box.innerHTML = "";
-  if (!edges.length) { box.append(el("p", {class: "note"}, "No links.")); return; }
+  if (!edges.length) { box.append(el("p", {class: "note"}, T("No links."))); return; }
   const t = el("table"); const hr = el("tr");
-  ["Gene", "Disease", "Kind", set === "full100" ? "Relation" : "BioRED type", "Reason", set === "full100" ? "Evidence (first sentence)" : "Evidence"].forEach(h => hr.append(el("th", {}, h))); t.append(hr);
+  ["Gene", "Disease", "Kind", set === "full100" ? "Relation" : "BioRED type", "Reason", set === "full100" ? "Evidence (first sentence)" : "Evidence"].forEach(h => hr.append(el("th", {}, T(h)))); t.append(hr);
   const name = id => p.nodes.find(n => n.id === id).name;
   edges.forEach(e => { const tr = el("tr"); const [c, dash, label] = STYLE[set][styleKey(e)];
-    const k = el("td"); const sw = el("span", {class: "sw"}); sw.style.borderTopColor = `var(${c})`; sw.style.borderTopStyle = dash ? "dashed" : "solid"; k.append(sw, label);
+    const k = el("td"); const sw = el("span", {class: "sw"}); sw.style.borderTopColor = `var(${c})`; sw.style.borderTopStyle = dash ? "dashed" : "solid"; k.append(sw, T(label));
     tr.append(el("td", {}, name(e.g)), el("td", {}, name(e.d)), k, el("td", {}, e.rel || ""), el("td", {}, e.why || ""), el("td", {class: "q"}, e.quote || "")); t.append(tr); });
   box.append(t);
 }
 
-async function load(name) {
+async function load(name, paperId) {
   set = name; document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.set === name));
-  if (!cache[name]) { document.getElementById("graphBox").textContent = "Loading…"; cache[name] = await fetch(`${name}.json`).then(r => r.json()); }
-  data = cache[name]; current = 0; document.getElementById("q").value = ""; legend(); fillSelect(); render();
+  if (!cache[name]) { document.getElementById("graphBox").textContent = T("Loading…"); cache[name] = await fetch(`${name}.json`).then(r => r.json()); }
+  data = cache[name]; current = Math.max(0, data.papers.findIndex(p => p.id === paperId)); document.getElementById("q").value = ""; legend(); fillSelect(); render();
 }
 document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => load(b.dataset.set)));
 document.getElementById("paper").addEventListener("change", e => { current = +e.target.value; render(); });
@@ -212,6 +239,19 @@ document.getElementById("q").addEventListener("input", () => { fillSelect(); con
 const step = d => { const sel = document.getElementById("paper"); const i = sel.selectedIndex + d; if (i >= 0 && i < sel.options.length) { sel.selectedIndex = i; current = +sel.value; render(); } };
 document.getElementById("prev").addEventListener("click", () => step(-1)); document.getElementById("next").addEventListener("click", () => step(1));
 document.getElementById("weak").addEventListener("change", render); document.getElementById("lonely").addEventListener("change", render);
-load(location.hash === "#biored" ? "biored" : "full100").catch(err => { document.getElementById("graphBox").textContent = "Could not load the graph data (" + err + "). Open this page through a web server, not as a local file."; });
+const langBtn = document.getElementById("langBtn");
+function setLang(lang, remember) {
+  LANG = lang; document.documentElement.classList.toggle("zh", lang === "zh"); document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+  langBtn.textContent = lang === "zh" ? "English" : "中文"; document.getElementById("q").placeholder = T("Filter papers (id, title)");
+  if (remember) { try { localStorage.setItem("gdt-lang", lang); } catch (e) {} }
+  if (data) { legend(); fillSelect(); render(); }
+}
+let startLang = new URLSearchParams(location.search).get("lang");
+if (startLang !== "zh" && startLang !== "en") { try { startLang = localStorage.getItem("gdt-lang"); } catch (e) { startLang = null; } }
+setLang(startLang === "zh" ? "zh" : "en", false);
+langBtn.addEventListener("click", () => setLang(LANG === "zh" ? "en" : "zh", true));
+const want = location.hash.slice(1);
+addEventListener("hashchange", () => { const h = location.hash.slice(1); if (h) load(h === "biored" || h.startsWith("PMID") ? "biored" : "full100", h); });
+load(want === "biored" || want.startsWith("PMID") ? "biored" : "full100", want).catch(err => { document.getElementById("graphBox").textContent = "Could not load the graph data (" + err + "). Open this page through a web server, not as a local file."; });
 </script>
 </body></html>
