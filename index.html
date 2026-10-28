@@ -67,7 +67,7 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
 <nav class="toc">
  <a href="#task">The task</a><a href="#workflow">Workflow</a><a href="#method">Building the method</a><a href="#cost">Cost optimization</a>
  <a href="#pipeline">Single-request pipeline</a><a href="#ab">A/B test</a><a href="#pubtator">vs PubTator3</a><a href="#full100">100 papers</a>
- <a href="#biored">BioRED</a><a href="#next">What's next</a><a href="#pages">Result pages</a>
+ <a href="#biored">BioRED</a><a href="#graphs">Bipartite graphs</a><a href="#next">What's next</a><a href="#pages">Result pages</a>
 </nav>
 
 <section id="task">
@@ -212,6 +212,15 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
  </div>
 </section>
 
+<section id="graphs">
+ <h2>Gene–disease bipartite graphs</h2>
+ <p class="kicker">The task's final output: one bipartite graph per paper, with genes on one side, diseases on the other, and a link wherever the paper supports a relation. Every link carries its evidence sentence and source label.</p>
+ <div class="links">
+  <a href="graphs/index.html">100 full-text papers<span>972 supported links; uncertain and negative pairs on request</span></a>
+  <a href="graphs/index.html#biored">BioRED · 419 abstracts<span>Our graph overlaid on the expert gold relations: confirmed, not in gold, missed</span></a>
+ </div>
+</section>
+
 <section id="next">
  <h2>What's next</h2>
  <div class="grid2">
@@ -227,6 +236,7 @@ code{font-size:13px;background:var(--grid);padding:1px 5px;border-radius:4px}
   <a href="results/ab/v1_card_lean_medium/vs_pubtator.html">12 papers vs PubTator3<span>Every relation disagreement, with our evidence</span></a>
   <a href="results/full100/vs_pubtator.html">100 papers vs PubTator3<span>Full-run comparison (about 1 MB, may take a moment)</span></a>
   <a href="results/biored/biored_results.html">BioRED accuracy<span>419 abstracts, per split, and the head-to-head with PubTator3</span></a>
+  <a href="graphs/index.html">Bipartite graphs<span>One gene–disease graph per paper, for the 100 papers and BioRED</span></a>
  </div>
 </section>
 
