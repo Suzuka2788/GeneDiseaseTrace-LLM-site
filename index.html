@@ -67,7 +67,7 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
  <div class="bar">
   <a class="brand" href="#top">GeneDiseaseTrace-LLM</a>
   <div class="links-row">
-   <a href="#latest"><span data-l="en">Latest results</span><span data-l="zh">最新结果</span></a><a href="#task"><span data-l="en">Task</span><span data-l="zh">任务</span></a><a href="#workflow"><span data-l="en">Workflow</span><span data-l="zh">流程</span></a><a href="#method"><span data-l="en">Method</span><span data-l="zh">方法</span></a>
+   <a href="#latest"><span data-l="en">Latest results</span><span data-l="zh">最新结果</span></a><a href="#deliverable"><span data-l="en">Task results</span><span data-l="zh">任务结果</span></a><a href="#task"><span data-l="en">Task</span><span data-l="zh">任务</span></a><a href="#workflow"><span data-l="en">Workflow</span><span data-l="zh">流程</span></a><a href="#method"><span data-l="en">Method</span><span data-l="zh">方法</span></a>
    <a href="#cost"><span data-l="en">Cost</span><span data-l="zh">成本</span></a><a href="#pipeline"><span data-l="en">Pipeline</span><span data-l="zh">单次请求</span></a><a href="#ab">A/B</a>
    <a href="#pubtator">vs PubTator3</a><a href="#full100"><span data-l="en">100 papers</span><span data-l="zh">100 篇结果</span></a><a href="#biored">BioRED</a>
    <a href="#graphs"><span data-l="en">Graphs</span><span data-l="zh">二部图</span></a><a href="#next"><span data-l="en">Next</span><span data-l="zh">下一步</span></a><a href="#pages"><span data-l="en">Result pages</span><span data-l="zh">结果页</span></a>
@@ -130,6 +130,24 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
   <p class="note"><span data-l="en">Citations point curators to evidence and do not replace review. Of 12 false-citation controls, 9 were judged unsupported. These checks are exploratory: there was one annotator, who knew the study hypotheses.</span><span data-l="zh">引用可以引导复核，不能代替复核。12 条假引用对照中，9 条被判为不支持。这些检查是探索性的：只有一位标注者，且了解研究假设。</span></p>
  </div>
  <div class="callout"><b><span data-l="en">About the sections below</span><span data-l="zh">关于下面的内容</span></b><p><span data-l="en">They record the October 28 task presentation, which used the decision card (V1) and an earlier scorer that could credit one gold relation several times. The workflow, cost and 100-paper descriptions remain as a record; for evaluation results, use this section and the BioRED section.</span><span data-l="zh">下面记录的是 10 月 28 日的任务汇报，当时用的是判定卡（V1）和较早的评分方式，一个金标关系可能被多次计分。流程、成本和 100 篇论文的内容作为记录保留；评测结果请以本节和 BioRED 一节为准。</span></p></div>
+</section>
+
+<section id="deliverable">
+ <h2><span data-l="en">The original task, redone</span><span data-l="zh">重新完成的原任务</span></h2>
+ <p class="kicker"><span data-l="en">The task asked for genes, diseases and a gene–disease graph for each of 100 papers. We reran it with the current system (V6) and scored entity extraction separately for the first time.</span><span data-l="zh">原任务要求为 100 篇论文抽取基因和疾病，并为每篇构建基因–疾病图。我们用当前系统（V6）重新完成了任务，并第一次单独评测了实体抽取。</span></p>
+ <div class="grid2">
+  <div class="panel scroll"><h3><span data-l="en">Task 1: gene and disease extraction</span><span data-l="zh">任务 1：基因和疾病抽取</span></h3><table>
+   <tr><th><span data-l="en">BioRED Test, F1 by document concept</span><span data-l="zh">BioRED Test，文档概念层 F1</span></th><th class="num"><span data-l="en">Genes</span><span data-l="zh">基因</span></th><th class="num"><span data-l="en">Diseases</span><span data-l="zh">疾病</span></th></tr>
+   <tr><td><span data-l="en">V6 (98 abstracts)</span><span data-l="zh">V6（98 篇摘要）</span></td><td class="num"><b>0.968</b></td><td class="num">0.874</td></tr>
+   <tr><td><span data-l="en">V1 (100 abstracts)</span><span data-l="zh">V1（100 篇摘要）</span></td><td class="num">0.936</td><td class="num">0.855</td></tr>
+   <tr><td><span data-l="en">PubTator3 (100 abstracts)</span><span data-l="zh">PubTator3（100 篇摘要）</span></td><td class="num">0.917</td><td class="num"><b>0.958</b></td></tr>
+  </table><p class="note"><span data-l="en">Diseases include phenotypic features, as in BioRED. PubTator3's recognizer was trained on data including BioRED, and its annotations passed through our text alignment.</span><span data-l="zh">疾病包含表型特征，与 BioRED 一致。PubTator3 的实体模型训练数据包含 BioRED，其标注经过了我们的文本对齐。</span></p></div>
+  <div class="panel"><h3><span data-l="en">Task 2: relations on the 100 papers</span><span data-l="zh">任务 2：100 篇论文上的关系</span></h3><ul>
+   <li><span data-l="en">V6 completed 81 of 100 papers and reported 1,180 supported relations, plus 325 uncertain and 31 explicitly negative. V1 reported 881 on the same 81 papers.</span><span data-l="zh">V6 完成了 100 篇中的 81 篇，报告 1,180 条 supported 关系，另有 325 对 uncertain、31 对 explicit_negative。V1 在同样 81 篇上报告了 881 条。</span></li>
+   <li><span data-l="en">The other 19 papers were stopped by the provider's safety filter. Their graphs keep the October V1 result, marked [V1, October].</span><span data-l="zh">另外 19 篇被服务商的安全机制中止。它们的图保留十月的 V1 结果，并标为 [V1, October]。</span></li>
+   <li><span data-l="en">These papers have no gold labels, so more relations does not mean more correct relations.</span><span data-l="zh">这些论文没有金标，所以关系更多不等于正确的关系更多。</span></li>
+  </ul></div>
+ </div>
 </section>
 
 <section id="task">
@@ -241,7 +259,7 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
 </section>
 
 <section id="full100">
- <h2><span data-l="en">Evaluation across all 100 papers</span><span data-l="zh">全部 100 篇论文的评估结果</span></h2>
+ <h2><span data-l="en">October run across all 100 papers (V1)</span><span data-l="zh">全部 100 篇论文的评估结果</span></h2>
  <div class="tiles">
   <div class="tile"><div class="k"><span data-l="en">Total cost</span><span data-l="zh">总成本</span></div><div class="v">$43.67</div><div class="s"><span data-l="en">2.2 model hours · $0.44 and 78 s per paper</span><span data-l="zh">模型总耗时 2.2 小时 · 平均每篇 $0.44、78 秒</span></div></div>
   <div class="tile"><div class="k"><span data-l="en">Passed validation</span><span data-l="zh">通过格式校验</span></div><div class="v">100 / 100</div><div class="s"><span data-l="en">69 on the first request, 31 after one repair</span><span data-l="zh">69 篇首轮通过，31 篇经单次修正后通过</span></div></div>
@@ -281,7 +299,7 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
  <h2><span data-l="en">Gene–disease bipartite graphs</span><span data-l="zh">基因–疾病二部图</span></h2>
  <p class="kicker"><span data-l="en">Each paper has a bipartite graph with genes on one side and diseases on the other. Edges represent supported relations and retain the source sentences and study-finding/background labels.</span><span data-l="zh">每篇论文对应一张二部图，两侧分别为基因和疾病。连边表示 supported 关系，保留原文句子及本文发现/背景知识标签。</span></p>
  <div class="links">
-  <a href="graphs/index.html"><span data-l="en">100 full-text papers</span><span data-l="zh">100 篇全文论文</span><span><span data-l="en">972 supported links, with optional toggles for uncertain and negative pairs</span><span data-l="zh">包含 972 条 supported 连边，可按需切换显示 uncertain 与 negative 配对</span></span></a>
+  <a href="graphs/index.html"><span data-l="en">100 full-text papers</span><span data-l="zh">100 篇全文论文</span><span><span data-l="en">1,271 supported links (V6, with V1 for 19 papers), with optional toggles for uncertain and negative pairs</span><span data-l="zh">包含 972 条 supported 连边，可按需切换显示 uncertain 与 negative 配对</span></span></a>
   <a href="graphs/merged.html"><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇文献全局合并网络</span><span><span data-l="en">Every supported link aggregated into one network, with edge thickness proportional to supporting paper count</span><span data-l="zh">将全部 supported 连边聚合为一张全局网络，连边粗细反映支持该关系的论文数量</span></span></a>
   <a href="graphs/index.html#biored"><span data-l="en">BioRED · 419 abstracts</span><span data-l="zh">BioRED · 419 篇摘要</span><span><span data-l="en">Predicted graphs overlaid against expert gold relations: confirmed, unannotated in gold, and missed</span><span data-l="zh">模型预测图与专家金标准标注叠加对比：已确认、金标准未收录及未召回关系</span></span></a>
  </div>

@@ -84,8 +84,8 @@ const ZH = {
   "Gene": "基因", "Disease": "疾病", "Kind": "判定类别", "Relation": "关系类型", "BioRED type": "BioRED 关系类型", "Reason": "判定依据",
   "Evidence (first sentence)": "原文证据（首句）", "Evidence": "原文证据", "No links.": "暂无连边。", "links": "条连边", "link": "条连边",
   "BioRED entity": "仅 BioRED 标注实体", "Loading…": "加载中…", "Filter papers (id, title)": "筛选论文（编号、标题）",
-  "Claude Opus 5.5, frozen variant V1, one request per paper. Entities are those in each paper's gene × disease matrix; symptoms and phenotypes are kept in a separate table and not drawn.":
-    "Claude Opus 5.5，冻结配置 V1，单篇单次请求。图中节点来自每篇论文的基因 × 疾病主矩阵；临床症状与表型单独记录，未在图中绘制。",
+  "Claude Opus 5.5, minimal prompt V6, one request per paper; the 19 papers it could not complete keep their October V1 result, marked [V1, October]. Entities are those in each paper's gene × disease matrix; symptoms and phenotypes are kept in a separate table and not drawn.":
+    "Claude Opus 5.5，最小提示词 V6，单篇单次请求；未能完成的 19 篇保留十月的 V1 结果，并标为 [V1, October]。图中节点来自每篇论文的基因 × 疾病主矩阵；临床症状与表型单独记录，未在图中绘制。",
   "BioRED (Luo et al. 2022) gold gene–disease relations vs our V1 output on the same abstract. Italic gray names are entities only BioRED tagged, named as BioRED wrote them. The reason for each missed relation comes from the scorer (e.g., our pair judged uncertain, or a symptom we keep apart from diseases).":
     "BioRED（Luo et al. 2022）专家金标准基因–疾病关系与冻结版 V1 在同一摘要上的输出对比。灰色斜体名称表示仅由 BioRED 标注的实体（保留 BioRED 原文命名）。未召回关系的归因来自评估脚本（例如被本方法判为 uncertain 的配对，或按规则与疾病区分记录的临床症状）。判定依据与证据句保留英文原文。",
 };
@@ -107,7 +107,7 @@ const STYLE = {
   },
 };
 const FOOT = {
-  full100: "Claude Opus 5.5, frozen variant V1, one request per paper. Entities are those in each paper's gene × disease matrix; symptoms and phenotypes are kept in a separate table and not drawn.",
+  full100: "Claude Opus 5.5, minimal prompt V6, one request per paper; the 19 papers it could not complete keep their October V1 result, marked [V1, October]. Entities are those in each paper's gene × disease matrix; symptoms and phenotypes are kept in a separate table and not drawn.",
   biored: "BioRED (Luo et al. 2022) gold gene–disease relations vs our V1 output on the same abstract. Italic gray names are entities only BioRED tagged, named as BioRED wrote them. The reason for each missed relation comes from the scorer (e.g., our pair judged uncertain, or a symptom we keep apart from diseases).",
 };
 const cache = {}, tip = document.getElementById("tip");
