@@ -67,7 +67,7 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
  <div class="bar">
   <a class="brand" href="#top">GeneDiseaseTrace-LLM</a>
   <div class="links-row">
-   <a href="#latest"><span data-l="en">Latest results</span><span data-l="zh">最新结果</span></a><a href="#deliverable"><span data-l="en">Task results</span><span data-l="zh">任务结果</span></a><a href="#task"><span data-l="en">Task</span><span data-l="zh">任务</span></a><a href="#workflow"><span data-l="en">Workflow</span><span data-l="zh">流程</span></a><a href="#method"><span data-l="en">Method</span><span data-l="zh">方法</span></a>
+   <a href="#latest"><span data-l="en">Latest results</span><span data-l="zh">最新结果</span></a><a href="#deliverable"><span data-l="en">Task results</span><span data-l="zh">任务结果</span></a><a href="#v1v6">V1 / V6</a><a href="#task"><span data-l="en">Task</span><span data-l="zh">任务</span></a><a href="#workflow"><span data-l="en">Workflow</span><span data-l="zh">流程</span></a><a href="#method"><span data-l="en">Method</span><span data-l="zh">方法</span></a>
    <a href="#cost"><span data-l="en">Cost</span><span data-l="zh">成本</span></a><a href="#pipeline"><span data-l="en">Pipeline</span><span data-l="zh">单次请求</span></a><a href="#ab">A/B</a>
    <a href="#pubtator">vs PubTator3</a><a href="#full100"><span data-l="en">100 papers</span><span data-l="zh">100 篇结果</span></a><a href="#biored">BioRED</a>
    <a href="#graphs"><span data-l="en">Graphs</span><span data-l="zh">二部图</span></a><a href="#next"><span data-l="en">Next</span><span data-l="zh">下一步</span></a><a href="#pages"><span data-l="en">Result pages</span><span data-l="zh">结果页</span></a>
@@ -147,6 +147,44 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
    <li><span data-l="en">The other 19 papers were stopped by the provider's safety filter. Their graphs keep the October V1 result, marked [V1, October].</span><span data-l="zh">另外 19 篇被服务商的安全机制中止。它们的图保留十月的 V1 结果，并标为 [V1, October]。</span></li>
    <li><span data-l="en">These papers have no gold labels, so more relations does not mean more correct relations.</span><span data-l="zh">这些论文没有金标，所以关系更多不等于正确的关系更多。</span></li>
   </ul></div>
+ </div>
+</section>
+
+<section id="v1v6">
+ <h2><span data-l="en">V1 and V6 compared</span><span data-l="zh">V1 与 V6 对比</span></h2>
+ <p class="kicker"><span data-l="en">V1 is the 1,045-word decision card from October. V6 is the 108-word task prompt that replaced it. Both share the same output format, model and validator. Both sets of results stay on this site.</span><span data-l="zh">V1 是十月的 1,045 词判定卡，V6 是取代它的 108 词任务提示词。两者的输出格式、模型和校验器相同。两版结果都保留在本站。</span></p>
+ <div class="panel scroll"><table>
+  <tr><th><span data-l="en">Benchmark, one-to-one scoring</span><span data-l="zh">基准，一对一匹配</span></th><th class="num"><span data-l="en">V1: P / R / F1</span><span data-l="zh">V1：精确率 / 召回率 / F1</span></th><th class="num"><span data-l="en">V6: P / R / F1</span><span data-l="zh">V6：精确率 / 召回率 / F1</span></th><th class="num"><span data-l="en">V6 − V1, F1</span><span data-l="zh">V6 − V1，F1</span></th></tr>
+  <tr><td><span data-l="en">BioRED Dev+Test (143 abstracts)</span><span data-l="zh">BioRED Dev+Test（143 篇摘要）</span></td><td class="num">0.809 / 0.418 / 0.551</td><td class="num">0.739 / 0.604 / <b>0.665</b></td><td class="num">+0.114 [0.040, 0.197]</td></tr>
+  <tr><td><span data-l="en">BioRED Test (100 abstracts)</span><span data-l="zh">BioRED Test（100 篇摘要）</span></td><td class="num">0.755 / 0.386 / 0.511</td><td class="num">0.680 / 0.560 / <b>0.614</b></td><td class="num"><span data-l="en">not paired here</span><span data-l="zh">此处未配对</span></td></tr>
+  <tr><td><span data-l="en">EU-ADR abstracts</span><span data-l="zh">EU-ADR 摘要</span></td><td class="num">0.430 / 0.451 / 0.440</td><td class="num">0.429 / 0.588 / <b>0.496</b></td><td class="num">+0.060 [0.007, 0.113]</td></tr>
+  <tr><td><span data-l="en">RENET2 full texts</span><span data-l="zh">RENET2 全文</span></td><td class="num">0.274 / 0.337 / <b>0.302</b></td><td class="num">0.217 / 0.403 / 0.282</td><td class="num">−0.018 [−0.061, 0.037]</td></tr>
+  <tr><td><span data-l="en">Genes, BioRED Test (F1)</span><span data-l="zh">基因，BioRED Test（F1）</span></td><td class="num">0.936</td><td class="num"><b>0.968</b></td><td class="num"><span data-l="en">not paired</span><span data-l="zh">未配对</span></td></tr>
+  <tr><td><span data-l="en">Diseases, BioRED Test (F1)</span><span data-l="zh">疾病，BioRED Test（F1）</span></td><td class="num">0.855</td><td class="num"><b>0.874</b></td><td class="num"><span data-l="en">not paired</span><span data-l="zh">未配对</span></td></tr>
+ </table></div>
+ <p class="note"><span data-l="en">V6 had 94 of 100 valid EU-ADR abstracts and 33 of 40 RENET2 articles, against all of them for V1. Paired differences use documents valid for both. V6 was selected after BioRED Test results were seen, and V1 was not run on BioTriplex.</span><span data-l="zh">V6 在 EU-ADR 上有效 94/100，在 RENET2 上有效 33/40，V1 都是全部有效。配对差只用双方都有效的文档。V6 是看过 BioRED Test 结果后才选定的，V1 没有在 BioTriplex 上运行。</span></p>
+ <div class="grid2">
+  <div class="panel scroll"><h3><span data-l="en">The same 81 papers from the original task</span><span data-l="zh">原任务中相同的 81 篇论文</span></h3><table>
+   <tr><th></th><th class="num">V1</th><th class="num">V6</th></tr>
+   <tr><td><span data-l="en">Supported relations</span><span data-l="zh">Supported 关系</span></td><td class="num">881</td><td class="num">1,180</td></tr>
+   <tr><td><span data-l="en">Uncertain / explicitly negative</span><span data-l="zh">Uncertain / 明确否定</span></td><td class="num">390 / 46</td><td class="num">325 / 31</td></tr>
+   <tr><td><span data-l="en">Supported by both</span><span data-l="zh">两版都判 supported</span></td><td class="num" colspan="2">759</td></tr>
+   <tr><td><span data-l="en">Supported only by this version</span><span data-l="zh">只有这一版判 supported</span></td><td class="num">122</td><td class="num">421</td></tr>
+   <tr><td><span data-l="en">Cost per paper</span><span data-l="zh">每篇费用</span></td><td class="num">$0.41</td><td class="num">$0.64</td></tr>
+   <tr><td><span data-l="en">Papers needing a repair request</span><span data-l="zh">需要修复请求的论文</span></td><td class="num">23 / 81</td><td class="num">62 / 81</td></tr>
+  </table><p class="note"><span data-l="en">Of the 421 V6-only pairs, V1 labeled 193 uncertain, 153 not found and 3 negative; 72 had no matching V1 pair. These papers have no gold labels, so this shows disagreement, not which version is right.</span><span data-l="zh">在 421 对只有 V6 判 supported 的配对中，V1 判 193 对 uncertain、153 对 not_found、3 对否定，72 对没有对应配对。这些论文没有金标，所以这里只说明差异，不说明谁对。</span></p></div>
+  <div class="panel"><h3><span data-l="en">What the comparison shows</span><span data-l="zh">这个对比说明了什么</span></h3><ul>
+   <li><span data-l="en">V6 has higher recall on all three relation benchmarks. Its F1 is higher on BioRED and EU-ADR, and not distinguishable on RENET2.</span><span data-l="zh">V6 在三个关系基准上的召回率都更高。F1 在 BioRED 和 EU-ADR 上更高，在 RENET2 上无法区分。</span></li>
+   <li><span data-l="en">V1 is not worse on everything: its precision is equal or higher, it is cheaper per paper, and it produced far fewer format errors.</span><span data-l="zh">V1 并非样样更差：精确率相同或更高，每篇更便宜，格式错误也少得多。</span></li>
+   <li><span data-l="en">V1's October runs had almost no safety-filter failures, while V6 runs from November 3 had many. All V1 full-text runs came first, so time and prompt cannot be separated.</span><span data-l="zh">V1 在十月的运行几乎没有安全机制失败，V6 从 11 月 3 日起的运行失败很多。V1 的全文运行都在更早的时间，所以时间和提示词无法区分。</span></li>
+   <li><span data-l="en">This describes these two prompts. V1 changed many rules and its length at once, so the comparison does not say which rule matters.</span><span data-l="zh">这只说明这两个提示词。V1 同时改变了很多规则和长度，所以这个对比不能说明是哪条规则起作用。</span></li>
+  </ul></div>
+ </div>
+ <div class="links" style="margin-top:16px">
+  <a href="graphs/index.html"><span data-l="en">V6 graphs (current)</span><span data-l="zh">V6 二部图（当前）</span><span><span data-l="en">81 V6 papers, plus 19 labeled V1 results</span><span data-l="zh">81 篇 V6，另有 19 篇标注的 V1 结果</span></span></a>
+  <a href="graphs/index.html?set=full100_v1"><span data-l="en">V1 graphs (October)</span><span data-l="zh">V1 二部图（十月）</span><span><span data-l="en">All 100 papers, 972 supported links</span><span data-l="zh">全部 100 篇，972 条 supported 连边</span></span></a>
+  <a href="graphs/merged.html"><span data-l="en">Merged network, V6</span><span data-l="zh">合并网络，V6</span><span><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇合并成一张图</span></span></a>
+  <a href="graphs/merged.html?v=v1"><span data-l="en">Merged network, V1</span><span data-l="zh">合并网络，V1</span><span><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇合并成一张图</span></span></a>
  </div>
 </section>
 
