@@ -82,16 +82,16 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
  <p class="tag"><span data-l="en">Extracting gene–disease relations from full papers with an LLM. Each reported relation includes the source sentences used as evidence.</span><span data-l="zh">用 LLM 从论文全文中抽取基因–疾病关系，并为每条关系保留作为证据的原文句子。</span></p>
  <div class="by"><span data-l="en">Updated November 4, 2026 · Manuscript in preparation · First presented by Zeqian Tong on October 28, 2026</span><span data-l="zh">更新于 2026 年 11 月 4 日 · 论文准备中 · Zeqian Tong 于 2026 年 10 月 28 日首次汇报</span></div>
  <div class="tiles">
-  <div class="tile"><div class="k"><span data-l="en">Full-text recall</span><span data-l="zh">全文召回率</span></div><div class="v">0.81 / 0.83</div><div class="s"><span data-l="en">BioTriplex locked set / further articles, valid articles only; abstract input 0.37 / 0.31</span><span data-l="zh">BioTriplex 锁定集 / 新增文章，仅有效文章；只读摘要时为 0.37 / 0.31</span></div></div>
-  <div class="tile"><div class="k"><span data-l="en">BioRED Test F1</span><span data-l="zh">BioRED Test F1</span></div><div class="v">0.61</div><div class="s"><span data-l="en">PubTator3 0.68; paired difference not distinguishable from zero</span><span data-l="zh">PubTator3 为 0.68；配对差与 0 无法区分</span></div></div>
-  <div class="tile"><div class="k"><span data-l="en">Citations sufficient alone</span><span data-l="zh">引用句单独足够</span></div><div class="v">59–75%</div><div class="s"><span data-l="en">of supported pairs, BioRED–BioTriplex; one annotator</span><span data-l="zh">占 supported 关系，BioRED–BioTriplex；一位标注者</span></div></div>
-  <div class="tile"><div class="k"><span data-l="en">Full texts lost to safety filters</span><span data-l="zh">被安全机制挡住的全文</span></div><div class="v">13–29%</div><div class="s"><span data-l="en">Claude Opus 5.5, two BioTriplex batches; about $0.40 per completed article</span><span data-l="zh">Claude Opus 5.5，两批 BioTriplex；完成一篇约 $0.40</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Full-text recall</span><span data-l="zh">全文召回率</span></div><div class="v">0.81 / 0.83</div><div class="s"><span data-l="en">BioTriplex locked set / further articles, valid articles only; abstract input 0.37 / 0.31</span><span data-l="zh">BioTriplex 锁定集 / 新增文章，只算有结果的文章；只读摘要时为 0.37 / 0.31</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">BioRED Test F1</span><span data-l="zh">BioRED Test F1</span></div><div class="v">0.61</div><div class="s"><span data-l="en">PubTator3 0.68; paired difference not distinguishable from zero</span><span data-l="zh">PubTator3 为 0.68；配对差值的置信区间包含 0</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Citations sufficient alone</span><span data-l="zh">所引句子足以支持关系</span></div><div class="v">59–75%</div><div class="s"><span data-l="en">of supported pairs, BioRED–BioTriplex; one annotator</span><span data-l="zh">占 supported 关系的比例（BioRED–BioTriplex），由一位标注者判断</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Full texts lost to safety filters</span><span data-l="zh">被安全机制拦截的全文</span></div><div class="v">13–29%</div><div class="s"><span data-l="en">Claude Opus 5.5, two BioTriplex batches; about $0.40 per completed article</span><span data-l="zh">Claude Opus 5.5，两批 BioTriplex；每完成一篇约 $0.40</span></div></div>
  </div>
 </header>
 
 <section id="latest">
  <h2><span data-l="en">Latest results</span><span data-l="zh">最新结果</span></h2>
- <p class="kicker"><span data-l="en">We reworked the evaluation after the October presentation. All systems now use one-to-one matching, so one gold relation can credit only one prediction. The default system is a 108-word task prompt that shares a 595-word output format with every variant. Intervals are 95% document-level bootstrap intervals.</span><span data-l="zh">十月汇报后，我们重做了评测。现在所有系统都用一对一匹配，一个金标关系只能给一个预测计分。默认系统是 108 词的任务提示词，所有版本共用 595 词的输出格式说明。区间都是文章层 bootstrap 的 95% 区间。</span></p>
+ <p class="kicker"><span data-l="en">We reworked the evaluation after the October presentation. All systems now use one-to-one matching, so one gold relation can credit only one prediction. The default system is a 108-word task prompt that shares a 595-word output format with every variant. Intervals are 95% document-level bootstrap intervals.</span><span data-l="zh">十月汇报后，我们重做了评测。所有系统现在都采用一对一匹配，即一条金标关系只能匹配一条预测。默认系统使用 108 词的任务提示词，各版本共用 595 词的输出格式说明。方括号内为按文章 bootstrap 得到的 95% 置信区间。</span></p>
  <div class="panel scroll"><table>
   <tr><th><span data-l="en">BioTriplex, precision / recall / F1</span><span data-l="zh">BioTriplex，精确率 / 召回率 / F1</span></th><th class="num"><span data-l="en">Locked set (30 articles)</span><span data-l="zh">锁定集（30 篇）</span></th><th class="num"><span data-l="en">Further articles (49)</span><span data-l="zh">新增文章（49 篇）</span></th></tr>
   <tr><td>PubTator3</td><td class="num">0.484 / 0.305 / 0.374</td><td class="num">0.495 / 0.304 / 0.377</td></tr>
@@ -103,85 +103,85 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
   <tr><td><span data-l="en">Claude Opus 5.5, full text</span><span data-l="zh">Claude Opus 5.5，全文</span></td><td class="num"><b>0.388 / 0.813 / 0.525</b> <span data-l="en">(25 valid)</span><span data-l="zh">（25 篇有效）</span></td><td class="num"><b>0.332 / 0.829 / 0.474</b> <span data-l="en">(35 valid)</span><span data-l="zh">（35 篇有效）</span></td></tr>
   <tr><td><span data-l="en">GPT-6.1 Sol, full text</span><span data-l="zh">GPT-6.1 Sol，全文</span></td><td class="num">0.290 / 0.858 / 0.433 <span data-l="en">(27 valid)</span><span data-l="zh">（27 篇有效）</span></td><td class="num"><span data-l="en">not run</span><span data-l="zh">未运行</span></td></tr>
  </table></div>
- <p class="note"><span data-l="en">The locked set was fixed before any run. The 49 further articles were chosen after its results were known, under a protocol written before their run, so they are further validation and not a held-out test. BioTriplex annotation is not exhaustive, so measured precision can understate textual correctness.</span><span data-l="zh">锁定集在任何运行之前就已固定。新增的 49 篇是看过锁定集结果后才确定的，运行前写好了规格，所以只算进一步验证，不算独立测试。BioTriplex 的标注不完整，测得的精确率可能低估文本上的正确性。</span></p>
+ <p class="note"><span data-l="en">The locked set was fixed before any run. The 49 further articles were chosen after its results were known, under a protocol written before their run, so they are further validation and not a held-out test. BioTriplex annotation is not exhaustive, so measured precision can understate textual correctness.</span><span data-l="zh">锁定集在所有运行之前就已固定。新增的 49 篇是在看到锁定集结果后才确定的，运行前已写好方案，因此只算进一步验证，不是独立测试集。BioTriplex 的标注并不完整，所以实测精确率可能低于文本中的真实情况。</span></p>
  <div class="grid2">
-  <div class="panel"><h3><span data-l="en">What held up</span><span data-l="zh">站得住的结果</span></h3><ul class="pros">
-   <li><span data-l="en">Reading the full text raised recall on both batches. Claude gained 0.448 [0.299, 0.588] on the locked set; on the further articles it gained 0.518 [0.374, 0.626] on valid articles and 0.322 [0.133, 0.477] with failures counted as empty.</span><span data-l="zh">读全文在两批文章上都提高了召回率。Claude 在锁定集上提高 0.448 [0.299, 0.588]；在新增文章上，有效文章提高 0.518 [0.374, 0.626]，失败记为空答案时提高 0.322 [0.133, 0.477]。</span></li>
-   <li><span data-l="en">The gain is not specific to LLMs: BioREx also rose by 0.430 and 0.508. It is not automatic either: RENET2 showed no clear gain on either batch.</span><span data-l="zh">这种提升不是 LLM 独有的：BioREx 也提高了 0.430 和 0.508。它也不是必然的：RENET2 在两批上都没有明显提升。</span></li>
-   <li><span data-l="en">On valid articles of the further batch, Claude's F1 exceeded RENET2's by 0.262 [0.148, 0.365] and BioREx's by 0.150 [0.104, 0.194]. On the locked set the F1 difference from RENET2 spanned zero (+0.145 [−0.013, 0.291]).</span><span data-l="zh">在新增文章的有效文章上，Claude 的 F1 比 RENET2 高 0.262 [0.148, 0.365]，比 BioREx 高 0.150 [0.104, 0.194]。在锁定集上，与 RENET2 的 F1 差区间跨 0（+0.145 [−0.013, 0.291]）。</span></li>
-   <li><span data-l="en">On BioRED Test (100 abstracts), F1 was 0.614 against 0.680 for PubTator3; the paired difference was −0.064 [−0.151, 0.033]. PubTator3's relation model was trained on data including BioRED.</span><span data-l="zh">在 BioRED Test（100 篇摘要）上，F1 是 0.614，PubTator3 是 0.680；配对差是 −0.064 [−0.151, 0.033]。PubTator3 的关系模型训练数据包含 BioRED。</span></li>
+  <div class="panel"><h3><span data-l="en">What held up</span><span data-l="zh">主要发现</span></h3><ul class="pros">
+   <li><span data-l="en">Reading the full text raised recall on both batches. Claude gained 0.448 [0.299, 0.588] on the locked set; on the further articles it gained 0.518 [0.374, 0.626] on valid articles and 0.322 [0.133, 0.477] with failures counted as empty.</span><span data-l="zh">在两批文章上，读全文都提高了召回率。Claude 在锁定集上提高 0.448 [0.299, 0.588]；在新增文章上，只算有结果的文章时提高 0.518 [0.374, 0.626]，把失败文章计为空结果时提高 0.322 [0.133, 0.477]。</span></li>
+   <li><span data-l="en">The gain is not specific to LLMs: BioREx also rose by 0.430 and 0.508. It is not automatic either: RENET2 showed no clear gain on either batch.</span><span data-l="zh">这一提升并非 LLM 独有，BioREx 也分别提高了 0.430 和 0.508；但也不是所有系统都如此，RENET2 在两批文章上都没有明显提升。</span></li>
+   <li><span data-l="en">On valid articles of the further batch, Claude's F1 exceeded RENET2's by 0.262 [0.148, 0.365] and BioREx's by 0.150 [0.104, 0.194]. On the locked set the F1 difference from RENET2 spanned zero (+0.145 [−0.013, 0.291]).</span><span data-l="zh">在新增文章中有结果的文章上，Claude 的 F1 比 RENET2 高 0.262 [0.148, 0.365]，比 BioREx 高 0.150 [0.104, 0.194]。在锁定集上，Claude 与 RENET2 的 F1 差值的置信区间包含 0（+0.145 [−0.013, 0.291]）。</span></li>
+   <li><span data-l="en">On BioRED Test (100 abstracts), F1 was 0.614 against 0.680 for PubTator3; the paired difference was −0.064 [−0.151, 0.033]. PubTator3's relation model was trained on data including BioRED.</span><span data-l="zh">在 BioRED Test（100 篇摘要）上，F1 为 0.614，PubTator3 为 0.680，配对差值为 −0.064 [−0.151, 0.033]。PubTator3 的关系模型在训练时用到了 BioRED。</span></li>
   </ul></div>
-  <div class="panel"><h3><span data-l="en">What limits these results</span><span data-l="zh">这些结果的局限</span></h3><ul class="cons">
-   <li><span data-l="en">Safety filters left 4 of 30 and 14 of 49 BioTriplex full texts without a Claude result. A blocked article says nothing about extraction ability, but users still lose it: with failures counted as empty, recall on the further articles is 0.632, against 0.848 for BioREx, which runs locally.</span><span data-l="zh">安全机制让 30 篇中的 4 篇和 49 篇中的 14 篇全文没有 Claude 结果。被拦截的文章不能说明提取能力，但用户确实拿不到结果：失败记为空答案时，新增文章的召回率是 0.632，本地运行的 BioREx 是 0.848。</span></li>
-   <li><span data-l="en">Valid-article results apply only to articles that were not blocked; we do not know what triggers the filters.</span><span data-l="zh">有效文章上的结果只适用于没被拦截的文章；我们不清楚触发拦截的原因。</span></li>
-   <li><span data-l="en">The October decision card lowered recall on BioRED (0.418 vs 0.604 on Dev+Test). This describes that one card; it changed many rules and the length at once, so it is not a general result about detailed prompts.</span><span data-l="zh">十月的判定卡在 BioRED 上降低了召回率（Dev+Test 上 0.418 对 0.604）。这只说明这一张卡；它同时改变了很多规则和长度，不能推广到详细提示词。</span></li>
-   <li><span data-l="en">F1 comparisons also depend on entity scope and training text, so they should not be read as better relation judgment.</span><span data-l="zh">F1 比较还受实体范围和训练文本影响，不能理解为关系判断能力更强。</span></li>
+  <div class="panel"><h3><span data-l="en">What limits these results</span><span data-l="zh">主要局限</span></h3><ul class="cons">
+   <li><span data-l="en">Safety filters left 4 of 30 and 14 of 49 BioTriplex full texts without a Claude result. A blocked article says nothing about extraction ability, but users still lose it: with failures counted as empty, recall on the further articles is 0.632, against 0.848 for BioREx, which runs locally.</span><span data-l="zh">安全机制使 30 篇中的 4 篇、49 篇中的 14 篇全文没有 Claude 结果。文章被拦截不代表抽取能力差，但用户确实拿不到结果：把失败文章计为空结果时，新增文章的召回率为 0.632，而本地运行的 BioREx 为 0.848。</span></li>
+   <li><span data-l="en">Valid-article results apply only to articles that were not blocked; we do not know what triggers the filters.</span><span data-l="zh">只算有结果的文章时，结论仅适用于未被拦截的文章；我们不清楚拦截的触发原因。</span></li>
+   <li><span data-l="en">The October decision card lowered recall on BioRED (0.418 vs 0.604 on Dev+Test). This describes that one card; it changed many rules and the length at once, so it is not a general result about detailed prompts.</span><span data-l="zh">十月的判定卡降低了 BioRED 上的召回率（Dev+Test：0.418 对 0.604）。这一结论只针对这张判定卡：它同时改动了许多规则和提示词长度，不能推广到所有详细提示词。</span></li>
+   <li><span data-l="en">F1 comparisons also depend on entity scope and training text, so they should not be read as better relation judgment.</span><span data-l="zh">F1 的比较还受实体范围和训练文本影响，不能据此认为关系判断能力更强。</span></li>
   </ul></div>
  </div>
- <div class="panel" style="margin-top:16px"><h3><span data-l="en">Do the cited sentences support the relation?</span><span data-l="zh">引用句能支持关系吗？</span></h3>
-  <p><span data-l="en">Every cited sentence ID resolves, but that does not show support. One annotator judged a stratified sample of 30 pairs per corpus, seeing only the cited sentences, with results weighted to all supported pairs.</span><span data-l="zh">所有引用句 ID 都能解析，但这不等于真的支持。一位标注者在每个语料上判断了 30 条分层抽样的关系，只看引用句，结果按全部 supported 关系加权。</span></p>
+ <div class="panel" style="margin-top:16px"><h3><span data-l="en">Do the cited sentences support the relation?</span><span data-l="zh">所引句子真的支持这条关系吗？</span></h3>
+  <p><span data-l="en">Every cited sentence ID resolves, but that does not show support. One annotator judged a stratified sample of 30 pairs per corpus, seeing only the cited sentences, with results weighted to all supported pairs.</span><span data-l="zh">所有引用的句子编号都能定位到原文，但这不等于句子真的支持该关系。一位标注者在每个语料上检查了 30 条分层抽样的关系，只看所引句子，结果再按全部 supported 关系加权。</span></p>
   <div class="scroll"><table>
    <tr><th></th><th class="num">BioRED Test</th><th class="num"><span data-l="en">BioTriplex full text</span><span data-l="zh">BioTriplex 全文</span></th></tr>
-   <tr><td><span data-l="en">Sufficient on their own</span><span data-l="zh">单独足够</span></td><td class="num"><b>58.5%</b> [45.8, 70.9]</td><td class="num"><b>75.4%</b> [58.0, 89.1]</td></tr>
-   <tr><td><span data-l="en">Need surrounding text</span><span data-l="zh">需要上下文</span></td><td class="num">32.0%</td><td class="num">19.0%</td></tr>
-   <tr><td><span data-l="en">Hedged only</span><span data-l="zh">只有推测性措辞</span></td><td class="num">3.8%</td><td class="num">0%</td></tr>
+   <tr><td><span data-l="en">Sufficient on their own</span><span data-l="zh">足以支持</span></td><td class="num"><b>58.5%</b> [45.8, 70.9]</td><td class="num"><b>75.4%</b> [58.0, 89.1]</td></tr>
+   <tr><td><span data-l="en">Need surrounding text</span><span data-l="zh">需结合上下文</span></td><td class="num">32.0%</td><td class="num">19.0%</td></tr>
+   <tr><td><span data-l="en">Hedged only</span><span data-l="zh">仅为推测性表述</span></td><td class="num">3.8%</td><td class="num">0%</td></tr>
    <tr><td><span data-l="en">Not supported</span><span data-l="zh">不支持</span></td><td class="num">5.6%</td><td class="num">5.6%</td></tr>
   </table></div>
-  <p class="note"><span data-l="en">Citations point curators to evidence and do not replace review. Of 12 false-citation controls, 9 were judged unsupported. These checks are exploratory: there was one annotator, who knew the study hypotheses.</span><span data-l="zh">引用可以引导复核，不能代替复核。12 条假引用对照中，9 条被判为不支持。这些检查是探索性的：只有一位标注者，且了解研究假设。</span></p>
+  <p class="note"><span data-l="en">Citations point curators to evidence and do not replace review. Of 12 false-citation controls, 9 were judged unsupported. These checks are exploratory: there was one annotator, who knew the study hypotheses.</span><span data-l="zh">引用可以帮助定位证据，但不能代替人工复核。12 条人为替换的错误引用中，9 条被判为不支持。这些检查属于探索性分析：只有一位标注者，且其了解研究假设。</span></p>
  </div>
- <div class="callout"><b><span data-l="en">About the sections below</span><span data-l="zh">关于下面的内容</span></b><p><span data-l="en">They record the October 28 task presentation, which used the decision card (V1) and an earlier scorer that could credit one gold relation several times. The workflow, cost and 100-paper descriptions remain as a record; for evaluation results, use this section and the BioRED section.</span><span data-l="zh">下面记录的是 10 月 28 日的任务汇报，当时用的是判定卡（V1）和较早的评分方式，一个金标关系可能被多次计分。流程、成本和 100 篇论文的内容作为记录保留；评测结果请以本节和 BioRED 一节为准。</span></p></div>
+ <div class="callout"><b><span data-l="en">About the sections below</span><span data-l="zh">关于本页其余内容</span></b><p><span data-l="en">They record the October 28 task presentation, which used the decision card (V1) and an earlier scorer that could credit one gold relation several times. The workflow, cost and 100-paper descriptions remain as a record; for evaluation results, use this section and the BioRED section.</span><span data-l="zh">以下内容记录的是 10 月 28 日的任务汇报，当时使用判定卡（V1）和较早的评分方式，同一条金标关系可能被重复计分。流程、成本和 100 篇论文部分仅作记录保留；评测结果以本节和 BioRED 一节为准。</span></p></div>
 </section>
 
 <section id="deliverable">
- <h2><span data-l="en">The original task, redone</span><span data-l="zh">重新完成的原任务</span></h2>
- <p class="kicker"><span data-l="en">The task asked for genes, diseases and a gene–disease graph for each of 100 papers. We reran it with the current system (V6) and scored entity extraction separately for the first time.</span><span data-l="zh">原任务要求为 100 篇论文抽取基因和疾病，并为每篇构建基因–疾病图。我们用当前系统（V6）重新完成了任务，并第一次单独评测了实体抽取。</span></p>
+ <h2><span data-l="en">The original task, redone</span><span data-l="zh">原任务的新版结果</span></h2>
+ <p class="kicker"><span data-l="en">The task asked for genes, diseases and a gene–disease graph for each of 100 papers. We reran it with the current system (V6) and scored entity extraction separately for the first time.</span><span data-l="zh">原任务要求从 100 篇论文中抽取基因和疾病，并为每篇论文构建基因–疾病图。我们用当前系统（V6）重新完成了这项任务，并首次单独评测了实体抽取。</span></p>
  <div class="grid2">
   <div class="panel scroll"><h3><span data-l="en">Task 1: gene and disease extraction</span><span data-l="zh">任务 1：基因和疾病抽取</span></h3><table>
-   <tr><th><span data-l="en">BioRED Test, F1 by document concept</span><span data-l="zh">BioRED Test，文档概念层 F1</span></th><th class="num"><span data-l="en">Genes</span><span data-l="zh">基因</span></th><th class="num"><span data-l="en">Diseases</span><span data-l="zh">疾病</span></th></tr>
+   <tr><th><span data-l="en">BioRED Test, F1 by document concept</span><span data-l="zh">BioRED Test，文档级概念 F1</span></th><th class="num"><span data-l="en">Genes</span><span data-l="zh">基因</span></th><th class="num"><span data-l="en">Diseases</span><span data-l="zh">疾病</span></th></tr>
    <tr><td><span data-l="en">V6 (98 abstracts)</span><span data-l="zh">V6（98 篇摘要）</span></td><td class="num"><b>0.968</b></td><td class="num">0.874</td></tr>
    <tr><td><span data-l="en">V1 (100 abstracts)</span><span data-l="zh">V1（100 篇摘要）</span></td><td class="num">0.936</td><td class="num">0.855</td></tr>
    <tr><td><span data-l="en">PubTator3 (100 abstracts)</span><span data-l="zh">PubTator3（100 篇摘要）</span></td><td class="num">0.917</td><td class="num"><b>0.958</b></td></tr>
-  </table><p class="note"><span data-l="en">Diseases include phenotypic features, as in BioRED. PubTator3's recognizer was trained on data including BioRED, and its annotations passed through our text alignment.</span><span data-l="zh">疾病包含表型特征，与 BioRED 一致。PubTator3 的实体模型训练数据包含 BioRED，其标注经过了我们的文本对齐。</span></p></div>
+  </table><p class="note"><span data-l="en">Diseases include phenotypic features, as in BioRED. PubTator3's recognizer was trained on data including BioRED, and its annotations passed through our text alignment.</span><span data-l="zh">与 BioRED 一致，疾病类包含表型特征。PubTator3 的实体识别模型在训练时用到了 BioRED，其标注还经过了我们的文本对齐。</span></p></div>
   <div class="panel"><h3><span data-l="en">Task 2: relations on the 100 papers</span><span data-l="zh">任务 2：100 篇论文上的关系</span></h3><ul>
-   <li><span data-l="en">V6 completed 81 of 100 papers and reported 1,180 supported relations, plus 325 uncertain and 31 explicitly negative. V1 reported 881 on the same 81 papers.</span><span data-l="zh">V6 完成了 100 篇中的 81 篇，报告 1,180 条 supported 关系，另有 325 对 uncertain、31 对 explicit_negative。V1 在同样 81 篇上报告了 881 条。</span></li>
-   <li><span data-l="en">The other 19 papers were stopped by the provider's safety filter. Their graphs keep the October V1 result, marked [V1, October].</span><span data-l="zh">另外 19 篇被服务商的安全机制中止。它们的图保留十月的 V1 结果，并标为 [V1, October]。</span></li>
-   <li><span data-l="en">These papers have no gold labels, so more relations does not mean more correct relations.</span><span data-l="zh">这些论文没有金标，所以关系更多不等于正确的关系更多。</span></li>
+   <li><span data-l="en">V6 completed 81 of 100 papers and reported 1,180 supported relations, plus 325 uncertain and 31 explicitly negative. V1 reported 881 on the same 81 papers.</span><span data-l="zh">V6 完成了 100 篇中的 81 篇，共报告 1,180 条 supported 关系，另有 325 对 uncertain 和 31 对 explicit_negative。V1 在这 81 篇上报告了 881 条。</span></li>
+   <li><span data-l="en">The other 19 papers were stopped by the provider's safety filter. Their graphs keep the October V1 result, marked [V1, October].</span><span data-l="zh">其余 19 篇被服务商的安全机制中止。这些论文的图保留十月的 V1 结果，并标注为 [V1, October]。</span></li>
+   <li><span data-l="en">These papers have no gold labels, so more relations does not mean more correct relations.</span><span data-l="zh">这些论文没有金标，关系更多并不等于正确的关系更多。</span></li>
   </ul></div>
  </div>
 </section>
 
 <section id="v1v6">
  <h2><span data-l="en">V1 and V6 compared</span><span data-l="zh">V1 与 V6 对比</span></h2>
- <p class="kicker"><span data-l="en">V1 is the 1,045-word decision card from October. V6 is the 108-word task prompt that replaced it. Both share the same output format, model and validator. Both sets of results stay on this site.</span><span data-l="zh">V1 是十月的 1,045 词判定卡，V6 是取代它的 108 词任务提示词。两者的输出格式、模型和校验器相同。两版结果都保留在本站。</span></p>
+ <p class="kicker"><span data-l="en">V1 is the 1,045-word decision card from October. V6 is the 108-word task prompt that replaced it. Both share the same output format, model and validator. Both sets of results stay on this site.</span><span data-l="zh">V1 是十月的 1,045 词判定卡，V6 是取代它的 108 词任务提示词。两者使用相同的输出格式、模型和校验器。本站同时保留两版结果。</span></p>
  <div class="panel scroll"><table>
-  <tr><th><span data-l="en">Benchmark, one-to-one scoring</span><span data-l="zh">基准，一对一匹配</span></th><th class="num"><span data-l="en">V1: P / R / F1</span><span data-l="zh">V1：精确率 / 召回率 / F1</span></th><th class="num"><span data-l="en">V6: P / R / F1</span><span data-l="zh">V6：精确率 / 召回率 / F1</span></th><th class="num"><span data-l="en">V6 − V1, F1</span><span data-l="zh">V6 − V1，F1</span></th></tr>
+  <tr><th><span data-l="en">Benchmark, one-to-one scoring</span><span data-l="zh">基准（一对一匹配）</span></th><th class="num"><span data-l="en">V1: P / R / F1</span><span data-l="zh">V1：精确率 / 召回率 / F1</span></th><th class="num"><span data-l="en">V6: P / R / F1</span><span data-l="zh">V6：精确率 / 召回率 / F1</span></th><th class="num"><span data-l="en">V6 − V1, F1</span><span data-l="zh">V6 − V1，F1</span></th></tr>
   <tr><td><span data-l="en">BioRED Dev+Test (143 abstracts)</span><span data-l="zh">BioRED Dev+Test（143 篇摘要）</span></td><td class="num">0.809 / 0.418 / 0.551</td><td class="num">0.739 / 0.604 / <b>0.665</b></td><td class="num">+0.114 [0.040, 0.197]</td></tr>
-  <tr><td><span data-l="en">BioRED Test (100 abstracts)</span><span data-l="zh">BioRED Test（100 篇摘要）</span></td><td class="num">0.755 / 0.386 / 0.511</td><td class="num">0.680 / 0.560 / <b>0.614</b></td><td class="num"><span data-l="en">not paired here</span><span data-l="zh">此处未配对</span></td></tr>
+  <tr><td><span data-l="en">BioRED Test (100 abstracts)</span><span data-l="zh">BioRED Test（100 篇摘要）</span></td><td class="num">0.755 / 0.386 / 0.511</td><td class="num">0.680 / 0.560 / <b>0.614</b></td><td class="num"><span data-l="en">not paired here</span><span data-l="zh">未做配对比较</span></td></tr>
   <tr><td><span data-l="en">EU-ADR abstracts</span><span data-l="zh">EU-ADR 摘要</span></td><td class="num">0.430 / 0.451 / 0.440</td><td class="num">0.429 / 0.588 / <b>0.496</b></td><td class="num">+0.060 [0.007, 0.113]</td></tr>
   <tr><td><span data-l="en">RENET2 full texts</span><span data-l="zh">RENET2 全文</span></td><td class="num">0.274 / 0.337 / <b>0.302</b></td><td class="num">0.217 / 0.403 / 0.282</td><td class="num">−0.018 [−0.061, 0.037]</td></tr>
-  <tr><td><span data-l="en">Genes, BioRED Test (F1)</span><span data-l="zh">基因，BioRED Test（F1）</span></td><td class="num">0.936</td><td class="num"><b>0.968</b></td><td class="num"><span data-l="en">not paired</span><span data-l="zh">未配对</span></td></tr>
-  <tr><td><span data-l="en">Diseases, BioRED Test (F1)</span><span data-l="zh">疾病，BioRED Test（F1）</span></td><td class="num">0.855</td><td class="num"><b>0.874</b></td><td class="num"><span data-l="en">not paired</span><span data-l="zh">未配对</span></td></tr>
+  <tr><td><span data-l="en">Genes, BioRED Test (F1)</span><span data-l="zh">基因，BioRED Test（F1）</span></td><td class="num">0.936</td><td class="num"><b>0.968</b></td><td class="num"><span data-l="en">not paired</span><span data-l="zh">未做配对比较</span></td></tr>
+  <tr><td><span data-l="en">Diseases, BioRED Test (F1)</span><span data-l="zh">疾病，BioRED Test（F1）</span></td><td class="num">0.855</td><td class="num"><b>0.874</b></td><td class="num"><span data-l="en">not paired</span><span data-l="zh">未做配对比较</span></td></tr>
  </table></div>
- <p class="note"><span data-l="en">V6 had 94 of 100 valid EU-ADR abstracts and 33 of 40 RENET2 articles, against all of them for V1. Paired differences use documents valid for both. V6 was selected after BioRED Test results were seen, and V1 was not run on BioTriplex.</span><span data-l="zh">V6 在 EU-ADR 上有效 94/100，在 RENET2 上有效 33/40，V1 都是全部有效。配对差只用双方都有效的文档。V6 是看过 BioRED Test 结果后才选定的，V1 没有在 BioTriplex 上运行。</span></p>
+ <p class="note"><span data-l="en">V6 had 94 of 100 valid EU-ADR abstracts and 33 of 40 RENET2 articles, against all of them for V1. Paired differences use documents valid for both. V6 was selected after BioRED Test results were seen, and V1 was not run on BioTriplex.</span><span data-l="zh">V6 在 EU-ADR 的 100 篇中有 94 篇有结果，在 RENET2 的 40 篇中有 33 篇有结果，V1 全部有结果。配对差值只使用双方都有结果的文档。V6 是在看到 BioRED Test 结果后才选定的；V1 没有在 BioTriplex 上运行。</span></p>
  <div class="grid2">
-  <div class="panel scroll"><h3><span data-l="en">The same 81 papers from the original task</span><span data-l="zh">原任务中相同的 81 篇论文</span></h3><table>
+  <div class="panel scroll"><h3><span data-l="en">The same 81 papers from the original task</span><span data-l="zh">原任务中同样的 81 篇论文</span></h3><table>
    <tr><th></th><th class="num">V1</th><th class="num">V6</th></tr>
    <tr><td><span data-l="en">Supported relations</span><span data-l="zh">Supported 关系</span></td><td class="num">881</td><td class="num">1,180</td></tr>
    <tr><td><span data-l="en">Uncertain / explicitly negative</span><span data-l="zh">Uncertain / 明确否定</span></td><td class="num">390 / 46</td><td class="num">325 / 31</td></tr>
-   <tr><td><span data-l="en">Supported by both</span><span data-l="zh">两版都判 supported</span></td><td class="num" colspan="2">759</td></tr>
-   <tr><td><span data-l="en">Supported only by this version</span><span data-l="zh">只有这一版判 supported</span></td><td class="num">122</td><td class="num">421</td></tr>
+   <tr><td><span data-l="en">Supported by both</span><span data-l="zh">两版都判为 supported</span></td><td class="num" colspan="2">759</td></tr>
+   <tr><td><span data-l="en">Supported only by this version</span><span data-l="zh">仅这一版判为 supported</span></td><td class="num">122</td><td class="num">421</td></tr>
    <tr><td><span data-l="en">Cost per paper</span><span data-l="zh">每篇费用</span></td><td class="num">$0.41</td><td class="num">$0.64</td></tr>
    <tr><td><span data-l="en">Papers needing a repair request</span><span data-l="zh">需要修复请求的论文</span></td><td class="num">23 / 81</td><td class="num">62 / 81</td></tr>
-  </table><p class="note"><span data-l="en">Of the 421 V6-only pairs, V1 labeled 193 uncertain, 153 not found and 3 negative; 72 had no matching V1 pair. These papers have no gold labels, so this shows disagreement, not which version is right.</span><span data-l="zh">在 421 对只有 V6 判 supported 的配对中，V1 判 193 对 uncertain、153 对 not_found、3 对否定，72 对没有对应配对。这些论文没有金标，所以这里只说明差异，不说明谁对。</span></p></div>
-  <div class="panel"><h3><span data-l="en">What the comparison shows</span><span data-l="zh">这个对比说明了什么</span></h3><ul>
-   <li><span data-l="en">V6 has higher recall on all three relation benchmarks. Its F1 is higher on BioRED and EU-ADR, and not distinguishable on RENET2.</span><span data-l="zh">V6 在三个关系基准上的召回率都更高。F1 在 BioRED 和 EU-ADR 上更高，在 RENET2 上无法区分。</span></li>
-   <li><span data-l="en">V1 is not worse on everything: its precision is equal or higher, it is cheaper per paper, and it produced far fewer format errors.</span><span data-l="zh">V1 并非样样更差：精确率相同或更高，每篇更便宜，格式错误也少得多。</span></li>
-   <li><span data-l="en">V1's October runs had almost no safety-filter failures, while V6 runs from November 3 had many. All V1 full-text runs came first, so time and prompt cannot be separated.</span><span data-l="zh">V1 在十月的运行几乎没有安全机制失败，V6 从 11 月 3 日起的运行失败很多。V1 的全文运行都在更早的时间，所以时间和提示词无法区分。</span></li>
-   <li><span data-l="en">This describes these two prompts. V1 changed many rules and its length at once, so the comparison does not say which rule matters.</span><span data-l="zh">这只说明这两个提示词。V1 同时改变了很多规则和长度，所以这个对比不能说明是哪条规则起作用。</span></li>
+  </table><p class="note"><span data-l="en">Of the 421 V6-only pairs, V1 labeled 193 uncertain, 153 not found and 3 negative; 72 had no matching V1 pair. These papers have no gold labels, so this shows disagreement, not which version is right.</span><span data-l="zh">在仅 V6 判为 supported 的 421 对中，V1 判为 uncertain 193 对、not_found 153 对、否定 3 对，另有 72 对在 V1 中没有对应配对。这些论文没有金标，所以这里只能说明两版不同，不能说明谁更准确。</span></p></div>
+  <div class="panel"><h3><span data-l="en">What the comparison shows</span><span data-l="zh">对比结论</span></h3><ul>
+   <li><span data-l="en">V6 has higher recall on all three relation benchmarks. Its F1 is higher on BioRED and EU-ADR, and not distinguishable on RENET2.</span><span data-l="zh">V6 在三个关系基准上的召回率都更高；F1 在 BioRED 和 EU-ADR 上更高，在 RENET2 上差值的置信区间包含 0。</span></li>
+   <li><span data-l="en">V1 is not worse on everything: its precision is equal or higher, it is cheaper per paper, and it produced far fewer format errors.</span><span data-l="zh">V1 也有优势：精确率持平或更高，每篇成本更低，格式错误也少得多。</span></li>
+   <li><span data-l="en">V1's October runs had almost no safety-filter failures, while V6 runs from November 3 had many. All V1 full-text runs came first, so time and prompt cannot be separated.</span><span data-l="zh">V1 十月的运行几乎没有遇到安全机制拦截，而 V6 自 11 月 3 日起的运行拦截很多。V1 的全文运行都更早，所以无法区分这是时间造成的还是提示词造成的。</span></li>
+   <li><span data-l="en">This describes these two prompts. V1 changed many rules and its length at once, so the comparison does not say which rule matters.</span><span data-l="zh">这一对比只针对这两个提示词。V1 同时改动了许多规则和长度，无法判断具体是哪条规则起了作用。</span></li>
   </ul></div>
  </div>
  <div class="links" style="margin-top:16px">
-  <a href="graphs/index.html"><span data-l="en">V6 graphs (current)</span><span data-l="zh">V6 二部图（当前）</span><span><span data-l="en">81 V6 papers, plus 19 labeled V1 results</span><span data-l="zh">81 篇 V6，另有 19 篇标注的 V1 结果</span></span></a>
+  <a href="graphs/index.html"><span data-l="en">V6 graphs (current)</span><span data-l="zh">V6 二部图（当前）</span><span><span data-l="en">81 V6 papers, plus 19 labeled V1 results</span><span data-l="zh">81 篇 V6 结果，另有 19 篇标注的 V1 结果</span></span></a>
   <a href="graphs/index.html?set=full100_v1"><span data-l="en">V1 graphs (October)</span><span data-l="zh">V1 二部图（十月）</span><span><span data-l="en">All 100 papers, 972 supported links</span><span data-l="zh">全部 100 篇，972 条 supported 连边</span></span></a>
   <a href="graphs/merged.html"><span data-l="en">Merged network, V6</span><span data-l="zh">合并网络，V6</span><span><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇合并成一张图</span></span></a>
   <a href="graphs/merged.html?v=v1"><span data-l="en">Merged network, V1</span><span data-l="zh">合并网络，V1</span><span><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇合并成一张图</span></span></a>
@@ -190,25 +190,25 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
 
 <section id="task">
  <h2><span data-l="en">The task</span><span data-l="zh">任务定义</span></h2>
- <p class="kicker"><span data-l="en">The task covers 100 biomedical papers in PMC JATS XML format.</span><span data-l="zh">任务包含 100 篇生物医学论文，输入为 PMC JATS XML 全文。</span></p>
+ <p class="kicker"><span data-l="en">The task covers 100 biomedical papers in PMC JATS XML format.</span><span data-l="zh">任务涉及 100 篇生物医学论文，输入为 PMC JATS XML 全文。</span></p>
  <div class="grid2">
-  <div class="panel"><h3><span data-l="en">Task 1 · Gene and disease extraction</span><span data-l="zh">任务 1 · 基因与疾病实体抽取</span></h3><p><span data-l="en">Extract all gene and disease mentions from each paper and output the identified entity lists, if any.</span><span data-l="zh">抽取每篇论文中提及的所有基因与疾病名称，并输出识别出的实体列表（如有）。</span></p></div>
+  <div class="panel"><h3><span data-l="en">Task 1 · Gene and disease extraction</span><span data-l="zh">任务 1 · 基因与疾病实体抽取</span></h3><p><span data-l="en">Extract all gene and disease mentions from each paper and output the identified entity lists, if any.</span><span data-l="zh">抽取每篇论文提及的所有基因和疾病名称，并输出实体列表。</span></p></div>
   <div class="panel"><h3><span data-l="en">Task 2 · Gene–disease relationship analysis</span><span data-l="zh">任务 2 · 基因–疾病关系分析</span></h3><p><span data-l="en">For paper <i>i</i> with N<sub>i</sub> genes and M<sub>i</sub> diseases, evaluate all N<sub>i</sub> × M<sub>i</sub> candidate pairs. Link a pair if the paper provides evidence of an association, correlation, or causal relationship, yielding a gene–disease bipartite graph per paper.</span><span data-l="zh">对含 N<sub>i</sub> 个基因与 M<sub>i</sub> 个疾病的第 <i>i</i> 篇论文，评估全部 N<sub>i</sub> × M<sub>i</sub> 个候选配对；若原文提供关联、相关或因果关系的证据则建立连边，最终构建每篇论文的基因–疾病二部图。</span></p></div>
  </div>
  <p class="note"><span data-l="en">We also record whether a relation is a finding of the paper or background knowledge. Pairs with weak evidence are marked uncertain and kept separate from the supported links.</span><span data-l="zh">在原任务之外，我们还标注关系来自本文发现还是背景知识。证据不足的配对记为 uncertain，与 supported 连边分开。</span></p>
 </section>
 
 <section id="workflow">
- <h2><span data-l="en">How the rules were developed</span><span data-l="zh">规则是怎样确定的</span></h2>
+ <h2><span data-l="en">How the rules were developed</span><span data-l="zh">规则的制定过程</span></h2>
  <p class="kicker"><span data-l="en">We used PubTator3 as a baseline. Early blind tests included Claude Opus 5.5, GPT-6.1 Sol and GPT-6 Astra.</span><span data-l="zh">对比基线为 PubTator3。早期盲测使用了 Claude Opus 5.5、GPT-6.1 Sol 和 GPT-6 Astra。</span></p>
  <div class="flow">
   <div class="step"><span class="n">1</span><b><span data-l="en">Write the rules</span><span data-l="zh">编写规则</span></b><p><span data-l="en">Write the extraction steps and decision rules in skill.md.</span><span data-l="zh">在 skill.md 中写明抽取步骤和判定规则。</span></p></div>
   <div class="step"><span class="n">2</span><b><span data-l="en">Try pilot papers</span><span data-l="zh">试跑论文</span></b><p><span data-l="en">Refine the rules on pilot papers, then fix the evaluation sets before comparing configurations.</span><span data-l="zh">用试点论文修改规则，在比较配置前固定评估集。</span></p></div>
-  <div class="step"><span class="n">3</span><b><span data-l="en">Blind test</span><span data-l="zh">独立盲测</span></b><p><span data-l="en">Run the papers in fresh sessions using only the written rules.</span><span data-l="zh">在新会话中运行论文，只提供书面规则。</span></p></div>
+  <div class="step"><span class="n">3</span><b><span data-l="en">Blind test</span><span data-l="zh">独立盲测</span></b><p><span data-l="en">Run the papers in fresh sessions using only the written rules.</span><span data-l="zh">在全新会话中运行论文，只提供书面规则。</span></p></div>
   <div class="step"><span class="n">4</span><b><span data-l="en">Format verification</span><span data-l="zh">格式校验</span></b><p><span data-l="en">Check quotes, character offsets and output tables with local code.</span><span data-l="zh">用本地代码检查引文、字符偏移和输出表格。</span></p></div>
   <div class="step"><span class="n">5</span><b><span data-l="en">Result table</span><span data-l="zh">结果对比表</span></b><p><span data-l="en">Compare model outputs and rule versions for each gene–disease pair.</span><span data-l="zh">逐对比较模型输出和规则版本。</span></p></div>
  </div>
- <div class="loop"><span data-l="en">Use disagreements to revise the rules or add boundary cases for the next round.</span><span data-l="zh">将分歧补入规则或边界案例，留待下一轮测试。</span></div>
+ <div class="loop"><span data-l="en">Use disagreements to revise the rules or add boundary cases for the next round.</span><span data-l="zh">把分歧写入规则或边界案例，用于下一轮测试。</span></div>
 </section>
 
 <section id="method">
@@ -224,7 +224,7 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
 
 <section id="cost">
  <h2><span data-l="en">Cost and runtime</span><span data-l="zh">成本与耗时</span></h2>
- <p class="kicker"><span data-l="en">These runs used Claude Opus 5.5. Costs are the CLI-reported list prices and include repair requests.</span><span data-l="zh">以下运行使用 Claude Opus 5.5，成本按 CLI 报告的官方标价统计，包含修复请求。</span></p>
+ <p class="kicker"><span data-l="en">These runs used Claude Opus 5.5. Costs are the CLI-reported list prices and include repair requests.</span><span data-l="zh">以下运行均使用 Claude Opus 5.5，成本按 CLI 报告的官方标价计算，含修复请求。</span></p>
  <div class="panel bars" id="costbars"></div>
  <p class="note"><span data-l="en">The paper sets differ between rows. The 100-paper average includes long papers and all repair requests.</span><span data-l="zh">各行使用的论文集不同。100 篇均值包含长论文和全部修复请求。</span></p>
  <div class="grid2" style="margin-top:16px">
@@ -232,7 +232,7 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
    <li><span data-l="en">We checked model behavior on 5 baseline papers before and after each change.</span><span data-l="zh">每次修改前后，都在 5 篇基准论文上检查模型行为。</span></li>
    <li><span data-l="en">Local code locates text spans and calculates character offsets.</span><span data-l="zh">文本定位和字符偏移计算交给本地代码。</span></li>
    <li><span data-l="en">Each paper gets one initial request and, if validation fails, at most one repair request.</span><span data-l="zh">每篇论文先请求一次；校验失败时，至多再请求一次修复。</span></li>
-   <li><span data-l="en">The shorter rules reduced input from 20k to 9k tokens and are reused as a cached system prompt.</span><span data-l="zh">压缩规则后，输入从 20k 降到 9k tokens，并通过缓存系统提示词复用。</span></li>
+   <li><span data-l="en">The shorter rules reduced input from 20k to 9k tokens and are reused as a cached system prompt.</span><span data-l="zh">规则压缩后，输入从 20k 降到 9k tokens，并以缓存的系统提示词复用。</span></li>
   </ul></div>
   <div class="panel"><h3><span data-l="en">Shorter model responses</span><span data-l="zh">缩短模型输出</span></h3><ul>
    <li><span data-l="en">The response contains entities, evidence references and gene–disease pairs.</span><span data-l="zh">模型返回实体、证据引用和基因–疾病配对。</span></li>
@@ -282,7 +282,7 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
  </div>
  <div class="grid2">
   <div class="panel"><h3><span data-l="en">Strengths</span><span data-l="zh">优势</span></h3><ul class="pros">
-   <li><span data-l="en">Our output contains 2.8 times as many relation pairs (64 vs 23), each with source sentences. These counts alone do not measure accuracy or recall.</span><span data-l="zh">本方法报告的关系对数量为基线的 2.8 倍（64 vs 23），每条附原文句子。仅凭这些数量，无法判断准确率或召回率。</span></li>
+   <li><span data-l="en">Our output contains 2.8 times as many relation pairs (64 vs 23), each with source sentences. These counts alone do not measure accuracy or recall.</span><span data-l="zh">本方法报告的关系数是基线的 2.8 倍（64 对 23），每条都附原文句子。但仅凭数量无法判断准确率或召回率。</span></li>
    <li><span data-l="en">81% draw on full-text sections beyond the abstract: body text, tables, and captions.</span><span data-l="zh">81% 的关系证据来自摘要以外的全文内容：正文、表格与图注。</span></li>
    <li><span data-l="en">Relations are labeled as study findings or background knowledge; 28 pairs are marked uncertain. On matched BioRED relations, source-label agreement is 75% (526/703).</span><span data-l="zh">关系附有本文发现或背景知识标签，另有 28 对标为 uncertain。在匹配的 BioRED 关系上，来源标签一致率为 75%（526/703）。</span></li>
    <li><span data-l="en">Distinguishes clinical symptoms from formal disease entities.</span><span data-l="zh">将临床症状与正式的疾病实体区分开。</span></li>
@@ -297,27 +297,27 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
 </section>
 
 <section id="full100">
- <h2><span data-l="en">October run across all 100 papers (V1)</span><span data-l="zh">全部 100 篇论文的评估结果</span></h2>
+ <h2><span data-l="en">October run across all 100 papers (V1)</span><span data-l="zh">十月在全部 100 篇论文上的运行（V1）</span></h2>
  <div class="tiles">
   <div class="tile"><div class="k"><span data-l="en">Total cost</span><span data-l="zh">总成本</span></div><div class="v">$43.67</div><div class="s"><span data-l="en">2.2 model hours · $0.44 and 78 s per paper</span><span data-l="zh">模型总耗时 2.2 小时 · 平均每篇 $0.44、78 秒</span></div></div>
-  <div class="tile"><div class="k"><span data-l="en">Passed validation</span><span data-l="zh">通过格式校验</span></div><div class="v">100 / 100</div><div class="s"><span data-l="en">69 on the first request, 31 after one repair</span><span data-l="zh">69 篇首轮通过，31 篇经单次修正后通过</span></div></div>
+  <div class="tile"><div class="k"><span data-l="en">Passed validation</span><span data-l="zh">通过格式校验</span></div><div class="v">100 / 100</div><div class="s"><span data-l="en">69 on the first request, 31 after one repair</span><span data-l="zh">69 篇首次通过，31 篇修复一次后通过</span></div></div>
   <div class="tile"><div class="k"><span data-l="en">Extracted relations</span><span data-l="zh">抽取关系数</span></div><div class="v">972</div><div class="s"><span data-l="en">supported; plus 451 uncertain, 47 explicitly negative</span><span data-l="zh">supported；另有 451 对 uncertain、47 对 explicit_negative</span></div></div>
   <div class="tile"><div class="k"><span data-l="en">vs PubTator3</span><span data-l="zh">对比 PubTator3</span></div><div class="v">972 vs 198</div><div class="s"><span data-l="en">90% of our relations rely on full text beyond the abstract</span><span data-l="zh">90% 的关系源自摘要以外的全文内容</span></div></div>
  </div>
  <div class="grid2">
-  <div class="panel"><h3><span data-l="en">Parser changes</span><span data-l="zh">解析器修改</span></h3><p><span data-l="en">The parser now accepts common harmless syntax variations that previously triggered extra repair calls.</span><span data-l="zh">解析器现在兼容一些不影响含义的常见语法变化，减少由此触发的额外修复。</span></p></div>
+  <div class="panel"><h3><span data-l="en">Parser changes</span><span data-l="zh">解析器修改</span></h3><p><span data-l="en">The parser now accepts common harmless syntax variations that previously triggered extra repair calls.</span><span data-l="zh">解析器现在能兼容一些不影响含义的常见语法差异，减少由此触发的额外修复。</span></p></div>
   <div class="panel"><h3><span data-l="en">Papers with no supported output</span><span data-l="zh">未返回 supported 关系的论文</span></h3>
    <p><span data-l="en">The pipeline returned no supported relations for 25 papers. We grouped them by their captured entities; confirming them as true negatives will require independent full-text review.</span><span data-l="zh">有 25 篇论文未返回 supported 关系。按捕获的实体可分为以下几类，是否属于真阴性还需要独立阅读全文确认。</span></p>
    <ul><li><span data-l="en">8 have no gene entities captured by the pipeline (e.g., dialysis timing, adolescent gambling, nanoparticle chemistry).</span><span data-l="zh">8 篇未捕获基因实体（如透析时机选择、青少年博彩行为、纳米颗粒化学）。</span></li>
    <li><span data-l="en">8 have genes but no disease entities captured under our policy (e.g., fly chromatin, worm oocytes, plant transcriptomes).</span><span data-l="zh">8 篇捕获基因但未捕获本规则范围内的疾病实体（如果蝇染色质、线虫卵母细胞、植物转录组研究）。</span></li>
    <li><span data-l="en">9 have both entity types but no pair labeled supported (e.g., assay markers or speculative discussion).</span><span data-l="zh">9 篇捕获两类实体，但没有配对被标记为 supported（如实验标志物或推测性讨论）。</span></li></ul>
-   <p><span data-l="en">PubTator3 reported one relation across these 25 papers. A relation missed by both systems would remain undetected in this comparison.</span><span data-l="zh">PubTator3 在这 25 篇中报告了 1 条关系。这种比较仍会遗漏两个系统都未检出的关系。</span></p></div>
+   <p><span data-l="en">PubTator3 reported one relation across these 25 papers. A relation missed by both systems would remain undetected in this comparison.</span><span data-l="zh">PubTator3 在这 25 篇中报告了 1 条关系。两个系统都漏掉的关系，在这一比较中无法发现。</span></p></div>
  </div>
 </section>
 
 <section id="biored">
  <h2><span data-l="en">Evaluation on BioRED</span><span data-l="zh">BioRED 评测</span></h2>
- <p class="kicker"><span data-l="en">All 100 Test abstracts, including the 27 without a gene–disease relation, where any supported pair counts as a false positive. Gene–disease pairs are matched one-to-one by overlapping mention spans, without requiring the relation type to agree. These are not official BioRED task scores.</span><span data-l="zh">全部 100 篇 Test 摘要，包括 27 篇没有基因–疾病关系的摘要，其中任何 supported 配对都算误报。基因–疾病配对按提及位置重叠一对一匹配，不要求关系类型一致。这些不是 BioRED 官方任务分数。</span></p>
+ <p class="kicker"><span data-l="en">All 100 Test abstracts, including the 27 without a gene–disease relation, where any supported pair counts as a false positive. Gene–disease pairs are matched one-to-one by overlapping mention spans, without requiring the relation type to agree. These are not official BioRED task scores.</span><span data-l="zh">使用全部 100 篇 Test 摘要，其中 27 篇没有基因–疾病关系，在这些摘要上报告的 supported 配对都算误报。基因–疾病配对按提及位置重叠做一对一匹配，不要求关系类型一致。这些不是 BioRED 官方任务分数。</span></p>
  <div class="grid2">
   <div class="panel scroll"><table>
    <tr><th></th><th class="num"><span data-l="en">Precision</span><span data-l="zh">精确率</span></th><th class="num"><span data-l="en">Recall</span><span data-l="zh">召回率</span></th><th class="num">F1</th></tr>
@@ -326,9 +326,9 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
    <tr><td>PubTator3</td><td class="num">0.758</td><td class="num">0.617</td><td class="num">0.680</td></tr>
   </table></div>
   <div class="panel"><ul>
-   <li><span data-l="en">The minimal prompt and PubTator3 were not distinguishable: F1 difference −0.064 [−0.151, 0.033]. The card was lower than PubTator3: −0.169 [−0.278, −0.069].</span><span data-l="zh">最小提示词和 PubTator3 无法区分：F1 差 −0.064 [−0.151, 0.033]。判定卡低于 PubTator3：−0.169 [−0.278, −0.069]。</span></li>
-   <li><span data-l="en">The minimal prompt was selected after Test results were seen, so these are not clean held-out estimates for it.</span><span data-l="zh">最小提示词是看过 Test 结果后才选定的，所以这些不是它的干净留出估计。</span></li>
-   <li><span data-l="en">The October figures (precision 0.89, recall 0.43 on 419 relation-positive abstracts) are superseded: they came from the card, excluded relation-negative abstracts and allowed many-to-one credit.</span><span data-l="zh">十月的数字（419 篇含关系摘要上精确率 0.89、召回率 0.43）已被取代：它们来自判定卡，排除了不含关系的摘要，并且允许多对一计分。</span></li>
+   <li><span data-l="en">The minimal prompt and PubTator3 were not distinguishable: F1 difference −0.064 [−0.151, 0.033]. The card was lower than PubTator3: −0.169 [−0.278, −0.069].</span><span data-l="zh">最小提示词与 PubTator3 的 F1 差值为 −0.064 [−0.151, 0.033]，置信区间包含 0。判定卡低于 PubTator3：−0.169 [−0.278, −0.069]。</span></li>
+   <li><span data-l="en">The minimal prompt was selected after Test results were seen, so these are not clean held-out estimates for it.</span><span data-l="zh">最小提示词是在看到 Test 结果后才选定的，所以这不是严格的留出集估计。</span></li>
+   <li><span data-l="en">The October figures (precision 0.89, recall 0.43 on 419 relation-positive abstracts) are superseded: they came from the card, excluded relation-negative abstracts and allowed many-to-one credit.</span><span data-l="zh">十月的数字（419 篇含关系摘要上精确率 0.89、召回率 0.43）已作废：它们来自判定卡，排除了不含关系的摘要，并允许一条金标关系被重复计分。</span></li>
   </ul></div>
  </div>
 </section>
@@ -337,17 +337,17 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
  <h2><span data-l="en">Gene–disease bipartite graphs</span><span data-l="zh">基因–疾病二部图</span></h2>
  <p class="kicker"><span data-l="en">Each paper has a bipartite graph with genes on one side and diseases on the other. Edges represent supported relations and retain the source sentences and study-finding/background labels.</span><span data-l="zh">每篇论文对应一张二部图，两侧分别为基因和疾病。连边表示 supported 关系，保留原文句子及本文发现/背景知识标签。</span></p>
  <div class="links">
-  <a href="graphs/index.html"><span data-l="en">100 full-text papers</span><span data-l="zh">100 篇全文论文</span><span><span data-l="en">1,271 supported links (V6, with V1 for 19 papers), with optional toggles for uncertain and negative pairs</span><span data-l="zh">包含 972 条 supported 连边，可按需切换显示 uncertain 与 negative 配对</span></span></a>
-  <a href="graphs/merged.html"><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇文献全局合并网络</span><span><span data-l="en">Every supported link aggregated into one network, with edge thickness proportional to supporting paper count</span><span data-l="zh">将全部 supported 连边聚合为一张全局网络，连边粗细反映支持该关系的论文数量</span></span></a>
-  <a href="graphs/index.html#biored"><span data-l="en">BioRED · 419 abstracts</span><span data-l="zh">BioRED · 419 篇摘要</span><span><span data-l="en">Predicted graphs overlaid against expert gold relations: confirmed, unannotated in gold, and missed</span><span data-l="zh">模型预测图与专家金标准标注叠加对比：已确认、金标准未收录及未召回关系</span></span></a>
+  <a href="graphs/index.html"><span data-l="en">100 full-text papers</span><span data-l="zh">100 篇全文论文</span><span><span data-l="en">1,271 supported links (V6, with V1 for 19 papers), with optional toggles for uncertain and negative pairs</span><span data-l="zh">共 1,271 条 supported 连边（V6，其中 19 篇为 V1），可切换显示 uncertain 和 negative 配对</span></span></a>
+  <a href="graphs/merged.html"><span data-l="en">All 100 papers in one graph</span><span data-l="zh">100 篇论文合并网络</span><span><span data-l="en">Every supported link aggregated into one network, with edge thickness proportional to supporting paper count</span><span data-l="zh">把所有 supported 连边合并成一张网络，线条越粗，支持该关系的论文越多</span></span></a>
+  <a href="graphs/index.html#biored"><span data-l="en">BioRED · 419 abstracts</span><span data-l="zh">BioRED · 419 篇摘要</span><span><span data-l="en">Predicted graphs overlaid against expert gold relations: confirmed, unannotated in gold, and missed</span><span data-l="zh">模型预测与专家金标准叠加对比：已确认、金标准未收录和漏报的关系</span></span></a>
  </div>
 </section>
 
 <section id="next">
  <h2><span data-l="en">Next steps</span><span data-l="zh">下一步</span></h2>
  <div class="grid2">
-  <div class="panel"><h3><span data-l="en">Stronger annotation</span><span data-l="zh">更可靠的标注</span></h3><p><span data-l="en">Repeat the citation check after a delay, add an independent second annotator, and judge the status labels on larger samples.</span><span data-l="zh">隔一段时间重复引用检查，加入独立的第二位标注者，并在更大样本上评估状态标签。</span></p></div>
-  <div class="panel"><h3><span data-l="en">A fallback for blocked articles</span><span data-l="zh">被拦截文章的备选方案</span></h3><p><span data-l="en">Test whether another model can complete the articles a safety filter blocks, and compare systems with entity scope held fixed.</span><span data-l="zh">测试另一个模型能否完成被安全机制拦截的文章，并在固定实体范围后比较各系统。</span></p></div>
+  <div class="panel"><h3><span data-l="en">Stronger annotation</span><span data-l="zh">更可靠的标注</span></h3><p><span data-l="en">Repeat the citation check after a delay, add an independent second annotator, and judge the status labels on larger samples.</span><span data-l="zh">隔一段时间重做引用检查，加入独立的第二位标注者，并在更大样本上评估状态标签。</span></p></div>
+  <div class="panel"><h3><span data-l="en">Safety-filter failures</span><span data-l="zh">安全机制拦截</span></h3><p><span data-l="en">Report suspected false positives to the provider, replicate whole batches with a second model, and compare systems with entity scope held fixed.</span><span data-l="zh">向服务商反馈疑似误判，用另一模型对整批文章做复现，并在固定实体范围后比较各系统。</span></p></div>
  </div>
 </section>
 
@@ -357,14 +357,14 @@ footer{border-top:1px solid var(--grid);margin-top:40px;padding:20px 0;color:var
  <div class="links">
   <a href="results/ab/ab_summary.html"><span data-l="en">A/B test summary</span><span data-l="zh">A/B 测试汇总</span><span><span data-l="en">V1 vs V2 vs V3 on the 12 frozen papers</span><span data-l="zh">12 篇冻结测试集上的 V1、V2、V3 详细对比</span></span></a>
   <a href="results/ab/v1_card_lean_medium/vs_pubtator.html"><span data-l="en">12 papers vs PubTator3</span><span data-l="zh">12 篇与 PubTator3 对比</span><span><span data-l="en">Pair-by-pair comparison of relation disagreements, with supporting quotes</span><span data-l="zh">逐对展示关系判定分歧及原文证据句</span></span></a>
-  <a href="results/full100/vs_pubtator.html"><span data-l="en">100 papers vs PubTator3</span><span data-l="zh">100 篇与 PubTator3 对比</span><span><span data-l="en">Full-corpus comparison (about 1 MB; may take a moment to load)</span><span data-l="zh">全量语料对比详情（约 1 MB，加载需片刻）</span></span></a>
+  <a href="results/full100/vs_pubtator.html"><span data-l="en">100 papers vs PubTator3</span><span data-l="zh">100 篇与 PubTator3 对比</span><span><span data-l="en">Full-corpus comparison (about 1 MB; may take a moment to load)</span><span data-l="zh">全部论文的对比详情（约 1 MB，加载需要一点时间）</span></span></a>
   <a href="results/biored/biored_results.html"><span data-l="en">BioRED results (October scorer, superseded)</span><span data-l="zh">BioRED 结果（十月评分方式，已被取代）</span><span><span data-l="en">419 abstracts by split, plus the 50-abstract PubTator3 comparison</span><span data-l="zh">419 篇摘要的分集统计，以及 50 篇摘要上的 PubTator3 对比</span></span></a>
-  <a href="graphs/index.html"><span data-l="en">Bipartite graphs</span><span data-l="zh">交互式二部图</span><span><span data-l="en">One gene–disease graph per paper across the 100 papers and BioRED</span><span data-l="zh">涵盖 100 篇全文与 BioRED 语料的逐篇基因–疾病二部图</span></span></a>
+  <a href="graphs/index.html"><span data-l="en">Bipartite graphs</span><span data-l="zh">交互式二部图</span><span><span data-l="en">One gene–disease graph per paper across the 100 papers and BioRED</span><span data-l="zh">100 篇全文和 BioRED 语料的逐篇基因–疾病二部图</span></span></a>
  </div>
 </section>
 
 <footer>
- <span data-l="en">Code repository: github.com/Suzuka2788/GeneDiseaseTrace-LLM. Input papers and benchmark texts are not redistributed here. BioRED: Luo et al., <i>Briefings in Bioinformatics</i> 2022. BioTriplex: Collins et al., <i>Bioinformatics</i> 2026. PubTator3: NCBI.</span><span data-l="zh">代码仓库：github.com/Suzuka2788/GeneDiseaseTrace-LLM。这里不重新分发输入论文和基准文本。BioRED：Luo et al., <i>Briefings in Bioinformatics</i> 2022。BioTriplex：Collins et al., <i>Bioinformatics</i> 2026。PubTator3：NCBI。</span>
+ <span data-l="en">Code repository: github.com/Suzuka2788/GeneDiseaseTrace-LLM. Input papers and benchmark texts are not redistributed here. BioRED: Luo et al., <i>Briefings in Bioinformatics</i> 2022. BioTriplex: Collins et al., <i>Bioinformatics</i> 2026. PubTator3: NCBI.</span><span data-l="zh">代码仓库：github.com/Suzuka2788/GeneDiseaseTrace-LLM。本站不转载输入论文和基准文本。BioRED：Luo et al., <i>Briefings in Bioinformatics</i> 2022。BioTriplex：Collins et al., <i>Bioinformatics</i> 2026。PubTator3：NCBI。</span>
 </footer>
 </main>
 <script>
